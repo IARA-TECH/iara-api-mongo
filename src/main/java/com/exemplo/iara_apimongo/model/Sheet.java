@@ -15,11 +15,8 @@ import java.util.List;
 public class Sheet {
     @Id
     private String id;
-
     private Integer factoryId;
-
     private AbacusPhoto.ShiftSummary shift;
-
     private Instant date;
 
     // lista de ids de abacus_photos
