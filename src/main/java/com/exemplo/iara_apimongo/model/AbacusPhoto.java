@@ -4,7 +4,6 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,6 +19,7 @@ public class AbacusPhoto {
     private ShiftSummary shift;
     private String abacusId;
     private String takenBy;
+    private LocalDateTime date;
     private LocalDateTime takenAt;
     private String urlBlob;
     private String validatedBy;

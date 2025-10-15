@@ -1,11 +1,11 @@
-package com.exemplo.iara_apimongo.dto.abacus;
+package com.exemplo.iara_apimongo.dto.abacusDTOs;
 
 import com.exemplo.iara_apimongo.model.Abacus;
-import lombok.Data;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.Data;
+
 import java.util.List;
-import java.util.Map;
 
 @Data
 public class AbacusRequestDTO {

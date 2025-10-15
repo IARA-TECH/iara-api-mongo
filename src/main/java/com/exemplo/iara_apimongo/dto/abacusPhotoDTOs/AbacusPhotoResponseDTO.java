@@ -1,4 +1,4 @@
-package com.exemplo.iara_apimongo.dto.abacusPhoto;
+package com.exemplo.iara_apimongo.dto.abacusPhotoDTOs;
 
 import com.exemplo.iara_apimongo.model.Abacus;
 import lombok.AllArgsConstructor;
@@ -6,10 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -22,6 +21,7 @@ public class AbacusPhotoResponseDTO {
     private String abacusId;
     private String takenBy;
     private LocalDateTime takenAt;
+    private LocalDateTime date;
     private String urlBlob;
     private String validatedBy;
     private List<String> lines;
@@ -31,4 +31,3 @@ public class AbacusPhotoResponseDTO {
     private String shiftStartsAt;
     private String shiftEndsAt;
 }
-

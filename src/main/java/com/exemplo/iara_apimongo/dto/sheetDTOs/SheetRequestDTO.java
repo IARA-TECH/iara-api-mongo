@@ -1,9 +1,10 @@
-package com.exemplo.iara_apimongo.dto.sheet;
+package com.exemplo.iara_apimongo.dto.sheetDTOs;
 
-import lombok.Data;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import java.time.LocalDate;
+import lombok.Data;
+
+import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -16,7 +17,7 @@ public class SheetRequestDTO {
     @NotEmpty(message = "Abacus photo IDs cannot be empty")
     private List<String> abacusPhotoIds;
 
-    private LocalDate date;
+    private Instant date;
 
     // Shift info
     private String shiftName;

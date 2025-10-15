@@ -1,14 +1,13 @@
-package com.exemplo.iara_apimongo.dto.abacusPhoto;
+package com.exemplo.iara_apimongo.dto.abacusPhotoDTOs;
 
 import com.exemplo.iara_apimongo.model.Abacus;
-import lombok.Data;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.Data;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Data
 public class AbacusPhotoRequestDTO {
@@ -24,6 +23,8 @@ public class AbacusPhotoRequestDTO {
     private String takenBy;
 
     private LocalDateTime takenAt;
+
+    private LocalDateTime date;
 
     @NotBlank(message = "URL blob is mandatory")
     private String urlBlob;
@@ -44,4 +45,3 @@ public class AbacusPhotoRequestDTO {
     private String shiftStartsAt;
     private String shiftEndsAt;
 }
-

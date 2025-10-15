@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
+import java.time.LocalTime;
 
 @Data
 @NoArgsConstructor
@@ -20,10 +21,10 @@ public class Shift {
     private String name;
 
     @NotBlank
-    private String startsAt;
+    private LocalTime startsAt;
 
     @NotBlank
-    private String endsAt;
+    private LocalTime endsAt;
 
     private Instant createdAt;
 }

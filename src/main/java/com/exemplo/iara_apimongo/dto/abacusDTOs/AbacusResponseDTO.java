@@ -1,4 +1,4 @@
-package com.exemplo.iara_apimongo.dto.abacus;
+package com.exemplo.iara_apimongo.dto.abacusDTOs;
 
 import com.exemplo.iara_apimongo.model.Abacus;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Map;
 
 @Data
 @NoArgsConstructor
