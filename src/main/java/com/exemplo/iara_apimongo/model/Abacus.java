@@ -14,7 +14,6 @@ import java.util.List;
 public class Abacus {
     @Id
     private String id;
-
     private Integer factoryId;
     private String name;
     private String description;
