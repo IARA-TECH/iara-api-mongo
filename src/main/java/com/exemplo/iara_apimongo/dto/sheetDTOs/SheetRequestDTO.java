@@ -18,8 +18,6 @@ public class SheetRequestDTO {
     private List<String> abacusPhotoIds;
 
     private Instant date;
-
-    // Shift info
     private String shiftName;
     private String shiftStartsAt;
     private String shiftEndsAt;
