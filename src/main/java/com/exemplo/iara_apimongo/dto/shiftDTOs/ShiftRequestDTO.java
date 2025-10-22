@@ -11,17 +11,17 @@ import java.time.LocalTime;
 @Data
 public class ShiftRequestDTO {
 
-    @Schema(description = "Nome do turno", example = "Turno da Manhã")
-    @NotBlank(message = "O nome do turno é obrigatório.")
+    @Schema(description = "Shift name", example = "Morning Shift")
+    @NotBlank(message = "Shift name is required.")
     private String name;
 
-    @Schema(description = "Horário de início (HH:mm)", example = "08:00")
-    @NotNull(message = "O horário de início é obrigatório.")
+    @Schema(description = "Start time (HH:mm)", example = "08:00")
+    @NotNull(message = "Start time is required.")
     @JsonFormat(pattern = "HH:mm")
     private LocalTime startsAt;
 
-    @Schema(description = "Horário de término (HH:mm)", example = "12:00")
-    @NotNull(message = "O horário de término é obrigatório.")
+    @Schema(description = "End time (HH:mm)", example = "12:00")
+    @NotNull(message = "End time is required.")
     @JsonFormat(pattern = "HH:mm")
     private LocalTime endsAt;
 }

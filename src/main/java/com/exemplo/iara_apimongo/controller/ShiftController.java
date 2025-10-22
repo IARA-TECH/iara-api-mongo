@@ -18,12 +18,12 @@ import java.util.List;
 @RequestMapping("/iara/api/shifts")
 @CrossOrigin("*")
 @RequiredArgsConstructor
-@Tag(name = "Shifts", description = "Operações relacionadas a turnos")
+@Tag(name = "Shifts", description = "Operations related to shifts")
 public class ShiftController {
 
     private final ShiftService service;
 
-    @Operation(summary = "Cria um novo turno")
+    @Operation(summary = "Create a new shift")
     @PostMapping
     public ResponseEntity<ApiResponse<ShiftResponseDTO>> create(@Valid @RequestBody ShiftRequestDTO dto) {
         ShiftResponseDTO created = service.create(dto);
@@ -31,21 +31,21 @@ public class ShiftController {
                 .body(ApiResponse.of("Shift created successfully", HttpStatus.CREATED.value(), created));
     }
 
-    @Operation(summary = "Busca um turno por ID")
+    @Operation(summary = "Find a shift by ID")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ShiftResponseDTO>> findById(@PathVariable String id) {
         ShiftResponseDTO found = service.findById(id);
         return ResponseEntity.ok(ApiResponse.of("Shift found", HttpStatus.OK.value(), found));
     }
 
-    @Operation(summary = "Lista todos os turnos")
+    @Operation(summary = "List all shifts")
     @GetMapping
     public ResponseEntity<ApiResponse<List<ShiftResponseDTO>>> findAll() {
         List<ShiftResponseDTO> all = service.findAll();
         return ResponseEntity.ok(ApiResponse.of("All shifts retrieved", HttpStatus.OK.value(), all));
     }
 
-    @Operation(summary = "Atualiza um turno existente")
+    @Operation(summary = "Update an existing shift")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<ShiftResponseDTO>> update(@PathVariable String id,
                                                                 @Valid @RequestBody ShiftRequestDTO dto) {
@@ -53,7 +53,7 @@ public class ShiftController {
         return ResponseEntity.ok(ApiResponse.of("Shift updated successfully", HttpStatus.OK.value(), updated));
     }
 
-    @Operation(summary = "Remove um turno por ID")
+    @Operation(summary = "Delete a shift by ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
         service.delete(id);

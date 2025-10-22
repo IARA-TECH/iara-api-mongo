@@ -1,6 +1,7 @@
 package com.exemplo.iara_apimongo.dto.dashboardsDTOs;
 
 import lombok.*;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 
 @Getter
@@ -10,38 +11,50 @@ import java.util.List;
 @Builder
 public class GenericDashboardDetailDTO {
 
-    private String titulo;
+    @Schema(description = "Dashboard title", example = "Generic Dashboard")
+    private String title;
+
+    @Schema(description = "Total value", example = "50")
     private int total;
-    private double taxaMedia;
-    private int comparativoAnterior;
 
-    private List<DashboardFalhasDTO.RankingMotivoDTO> rankingMotivosFalhas;
-    private List<DashboardGranjaDTO.RankingMotivoDTO> rankingMotivosGranjas;
+    @Schema(description = "Average rate", example = "25.0")
+    private double averageRate;
 
-    private List<DashboardGranjaDTO.PorFabricaDTO> porFabrica;
+    @Schema(description = "Comparison with previous period", example = "45")
+    private int previousComparison;
 
-    private DashboardFalhasDTO.EvolucaoMensalDTO evolucaoMensal;
+    @Schema(description = "Ranking of failure reasons")
+    private List<DashboardFalhasDTO.ReasonRankingDTO> failureReasonRanking;
+
+    @Schema(description = "Ranking of farm reasons")
+    private List<DashboardGranjaDTO.ReasonRankingDTO> farmReasonRanking;
+
+    @Schema(description = "Data by factory")
+    private List<DashboardGranjaDTO.ByFactoryDTO> byFactory;
+
+    @Schema(description = "Monthly evolution")
+    private DashboardFalhasDTO.MonthlyEvolutionDTO monthlyEvolution;
 
     public DashboardFalhasDTO toDashboardFalhasDTO() {
         return DashboardFalhasDTO.builder()
-                .titulo(titulo)
+                .title(title)
                 .total(total)
-                .taxaMedia(taxaMedia)
-                .comparativoAnterior(comparativoAnterior)
-                .rankingMotivos(rankingMotivosFalhas)
-                .evolucaoMensal(evolucaoMensal)
+                .averageRate(averageRate)
+                .previousComparison(previousComparison)
+                .reasonRanking(failureReasonRanking)
+                .monthlyEvolution(monthlyEvolution)
                 .build();
     }
 
     public DashboardGranjaDTO toDashboardGranjaDTO() {
         return DashboardGranjaDTO.builder()
-                .titulo(titulo)
+                .title(title)
                 .total(total)
-                .taxaMedia(taxaMedia)
-                .comparativoAnterior(comparativoAnterior)
-                .rankingMotivos(rankingMotivosGranjas)
-                .porFabrica(porFabrica)
-                .evolucaoMensal(evolucaoMensal)
+                .averageRate(averageRate)
+                .previousComparison(previousComparison)
+                .reasonRanking(farmReasonRanking)
+                .byFactory(byFactory)
+                .monthlyEvolution(monthlyEvolution)
                 .build();
     }
 }
