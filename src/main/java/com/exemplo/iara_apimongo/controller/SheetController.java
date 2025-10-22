@@ -18,12 +18,12 @@ import java.util.List;
 @RequestMapping("/iara/api/sheets")
 @CrossOrigin("*")
 @RequiredArgsConstructor
-@Tag(name = "Sheets", description = "Operações relacionadas a folhas de produção")
+@Tag(name = "Sheets", description = "Operations related to production sheets")
 public class SheetController {
 
     private final SheetService service;
 
-    @Operation(summary = "Cria uma nova folha de produção")
+    @Operation(summary = "Create a new production sheet")
     @PostMapping
     public ResponseEntity<ApiResponse<SheetResponseDTO>> create(@Valid @RequestBody SheetRequestDTO dto) {
         SheetResponseDTO created = service.create(dto);
@@ -31,21 +31,21 @@ public class SheetController {
                 .body(ApiResponse.of("Sheet created successfully", HttpStatus.CREATED.value(), created));
     }
 
-    @Operation(summary = "Busca uma folha por ID")
+    @Operation(summary = "Find a sheet by ID")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<SheetResponseDTO>> findById(@PathVariable String id) {
         SheetResponseDTO found = service.findById(id);
         return ResponseEntity.ok(ApiResponse.of("Sheet found", HttpStatus.OK.value(), found));
     }
 
-    @Operation(summary = "Lista todas as folhas")
+    @Operation(summary = "List all sheets")
     @GetMapping
     public ResponseEntity<ApiResponse<List<SheetResponseDTO>>> findAll() {
         List<SheetResponseDTO> all = service.findAll();
         return ResponseEntity.ok(ApiResponse.of("All sheets retrieved", HttpStatus.OK.value(), all));
     }
 
-    @Operation(summary = "Atualiza uma folha existente")
+    @Operation(summary = "Update an existing sheet")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<SheetResponseDTO>> update(@PathVariable String id,
                                                                 @Valid @RequestBody SheetRequestDTO dto) {
@@ -53,7 +53,7 @@ public class SheetController {
         return ResponseEntity.ok(ApiResponse.of("Sheet updated successfully", HttpStatus.OK.value(), updated));
     }
 
-    @Operation(summary = "Remove uma folha por ID")
+    @Operation(summary = "Delete a sheet by ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
         service.delete(id);

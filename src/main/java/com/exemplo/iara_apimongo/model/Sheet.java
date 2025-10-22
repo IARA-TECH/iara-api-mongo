@@ -22,6 +22,5 @@ public class Sheet {
 
     private Instant date;
 
-    // lista de ids de abacus_photos
     private List<String> abacusPhotos;
 }
