@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.Instant;
 import java.time.LocalTime;
@@ -21,10 +22,13 @@ public class Shift {
     private String name;
 
     @NotBlank
-    private LocalTime startsAt;
+    @Field("starts_at")
+    private String startsAt;
 
     @NotBlank
-    private LocalTime endsAt;
+    @Field("ends_at")
+    private String endsAt;
 
+    @Field("created_at")
     private Instant createdAt;
 }
