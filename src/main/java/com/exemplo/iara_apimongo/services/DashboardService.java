@@ -29,101 +29,100 @@ public class DashboardService {
     }
 
     public DashboardComparativoDTO getComparativo() {
-        List<String> periodos = Arrays.asList("Jan", "Feb", "Mar");
-        List<Integer> falhasTecnicas = Arrays.asList(5, 3, 7);
-        List<Integer> condenasGranja = Arrays.asList(10, 8, 12);
+        List<String> periods = Arrays.asList("Jan", "Feb", "Mar");
+        List<Integer> technicalFailures = Arrays.asList(5, 3, 7);
+        List<Integer> farmCondemnations = Arrays.asList(10, 8, 12);
 
-        DashboardComparativoDTO.TotaisDTO totais = new DashboardComparativoDTO.TotaisDTO(
-                condenasGranja.stream().mapToInt(Integer::intValue).sum(),
-                falhasTecnicas.stream().mapToInt(Integer::intValue).sum()
+        DashboardComparativoDTO.TotalsDTO totals = new DashboardComparativoDTO.TotalsDTO(
+                farmCondemnations.stream().mapToInt(Integer::intValue).sum(),
+                technicalFailures.stream().mapToInt(Integer::intValue).sum()
         );
 
-        List<DashboardComparativoDTO.RankingMesDTO> rankingMeses = IntStream.range(0, periodos.size())
-                .mapToObj(i -> new DashboardComparativoDTO.RankingMesDTO(periodos.get(i), falhasTecnicas.get(i) + condenasGranja.get(i)))
+        List<DashboardComparativoDTO.MonthlyRankingDTO> monthlyRanking = IntStream.range(0, periods.size())
+                .mapToObj(i -> new DashboardComparativoDTO.MonthlyRankingDTO(
+                        periods.get(i),
+                        technicalFailures.get(i) + farmCondemnations.get(i)
+                ))
                 .collect(Collectors.toList());
 
         return DashboardComparativoDTO.builder()
-                .titulo("Comparativo Mensal")
-                .periodos(periodos)
-                .falhasTecnicas(falhasTecnicas)
-                .condenasGranja(condenasGranja)
-                .totais(totais)
-                .rankingMeses(rankingMeses)
+                .title("Monthly Comparison")
+                .periods(periods)
+                .technicalFailures(technicalFailures)
+                .farmCondemnations(farmCondemnations)
+                .totals(totals)
+                .monthlyRanking(monthlyRanking)
                 .build();
     }
 
     public DashboardTurnosDTO getTurnos() {
-        List<DashboardTurnosDTO.QuantidadePorTurnoDTO> quantidadePorTurno = getQuantidadeTotalPorTurno();
-        DashboardTurnosDTO.EvolucaoMensalTurnosDTO evolucaoMensal = getEvolucaoMensalPorTurno();
+        List<DashboardTurnosDTO.QuantityPerShiftDTO> quantityPerShift = getTotalQuantityPerShift();
+        DashboardTurnosDTO.MonthlyEvolutionDTO monthlyEvolution = getMonthlyEvolutionPerShift();
 
         return DashboardTurnosDTO.builder()
-                .titulo("Dashboard de Turnos")
-                .quantidadePorTurno(quantidadePorTurno)
-                .evolucaoMensal(evolucaoMensal)
+                .title("Shift Dashboard")
+                .quantityPerShift(quantityPerShift)
+                .monthlyEvolution(monthlyEvolution)
                 .build();
     }
 
     public DashboardFalhasDTO getFalhas() {
-        GenericDashboardDetailDTO generic = getDashboardDetalhado();
+        GenericDashboardDetailDTO generic = getDetailedDashboard();
         return generic.toDashboardFalhasDTO();
     }
 
     public DashboardGranjaDTO getGranja() {
-        GenericDashboardDetailDTO generic = getDashboardDetalhado();
+        GenericDashboardDetailDTO generic = getDetailedDashboard();
         return generic.toDashboardGranjaDTO();
     }
 
-    private List<DashboardTurnosDTO.QuantidadePorTurnoDTO> getQuantidadeTotalPorTurno() {
+    private List<DashboardTurnosDTO.QuantityPerShiftDTO> getTotalQuantityPerShift() {
         return Arrays.asList(
-                new DashboardTurnosDTO.QuantidadePorTurnoDTO("Matutino", 15),
-                new DashboardTurnosDTO.QuantidadePorTurnoDTO("Vespertino", 20),
-                new DashboardTurnosDTO.QuantidadePorTurnoDTO("Noturno", 10)
+                new DashboardTurnosDTO.QuantityPerShiftDTO("Morning", 15),
+                new DashboardTurnosDTO.QuantityPerShiftDTO("Afternoon", 20),
+                new DashboardTurnosDTO.QuantityPerShiftDTO("Night", 10)
         );
     }
 
-    private DashboardTurnosDTO.EvolucaoMensalTurnosDTO getEvolucaoMensalPorTurno() {
-        List<String> periodos = Arrays.asList("Jan", "Feb", "Mar");
-        List<Integer> matutino = Arrays.asList(5, 6, 4);
-        List<Integer> vespertino = Arrays.asList(7, 5, 8);
-        List<Integer> noturno = Arrays.asList(3, 4, 2);
+    private DashboardTurnosDTO.MonthlyEvolutionDTO getMonthlyEvolutionPerShift() {
+        List<String> periods = Arrays.asList("Jan", "Feb", "Mar");
+        List<Integer> morning = Arrays.asList(5, 6, 4);
+        List<Integer> afternoon = Arrays.asList(7, 5, 8);
+        List<Integer> night = Arrays.asList(3, 4, 2);
 
-        return new DashboardTurnosDTO.EvolucaoMensalTurnosDTO(periodos, matutino, vespertino, noturno);
+        return new DashboardTurnosDTO.MonthlyEvolutionDTO(periods, morning, afternoon, night);
     }
 
-    private GenericDashboardDetailDTO getDashboardDetalhado() {
-        // Ranking para falhas
-        List<DashboardFalhasDTO.RankingMotivoDTO> rankingFalhas = Arrays.asList(
-                new DashboardFalhasDTO.RankingMotivoDTO("Motivo A", 5),
-                new DashboardFalhasDTO.RankingMotivoDTO("Motivo B", 3)
+    private GenericDashboardDetailDTO getDetailedDashboard() {
+        List<DashboardFalhasDTO.ReasonRankingDTO> failureRanking = Arrays.asList(
+                new DashboardFalhasDTO.ReasonRankingDTO("Reason A", 5),
+                new DashboardFalhasDTO.ReasonRankingDTO("Reason B", 3)
         );
 
-        // Ranking para granja
-        List<DashboardGranjaDTO.RankingMotivoDTO> rankingGranjas = Arrays.asList(
-                new DashboardGranjaDTO.RankingMotivoDTO("Motivo A", 7),
-                new DashboardGranjaDTO.RankingMotivoDTO("Motivo B", 4)
+        List<DashboardGranjaDTO.ReasonRankingDTO> farmRanking = Arrays.asList(
+                new DashboardGranjaDTO.ReasonRankingDTO("Reason A", 7),
+                new DashboardGranjaDTO.ReasonRankingDTO("Reason B", 4)
         );
 
-        // Por fábrica (somente granja)
-        List<DashboardGranjaDTO.PorFabricaDTO> porFabrica = Arrays.asList(
-                new DashboardGranjaDTO.PorFabricaDTO("Fábrica X", 7),
-                new DashboardGranjaDTO.PorFabricaDTO("Fábrica Y", 8)
+        List<DashboardGranjaDTO.ByFactoryDTO> byFactory = Arrays.asList(
+                new DashboardGranjaDTO.ByFactoryDTO("Factory X", 7),
+                new DashboardGranjaDTO.ByFactoryDTO("Factory Y", 8)
         );
 
-        // Evolução mensal
-        DashboardFalhasDTO.EvolucaoMensalDTO evolucaoMensal = new DashboardFalhasDTO.EvolucaoMensalDTO(
+        DashboardFalhasDTO.MonthlyEvolutionDTO monthlyEvolution = new DashboardFalhasDTO.MonthlyEvolutionDTO(
                 Arrays.asList("Jan", "Feb", "Mar"),
                 Arrays.asList(5, 3, 7)
         );
 
         return GenericDashboardDetailDTO.builder()
-                .titulo("Dashboard Detalhado")
+                .title("Detailed Dashboard")
                 .total(15)
-                .taxaMedia(0.25)
-                .comparativoAnterior(10)
-                .rankingMotivosFalhas(rankingFalhas)
-                .rankingMotivosGranjas(rankingGranjas)
-                .porFabrica(porFabrica)
-                .evolucaoMensal(evolucaoMensal)
+                .averageRate(0.25)
+                .previousComparison(10)
+                .failureReasonRanking(failureRanking)
+                .farmReasonRanking(farmRanking)
+                .byFactory(byFactory)
+                .monthlyEvolution(monthlyEvolution)
                 .build();
     }
 }

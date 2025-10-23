@@ -1,4 +1,11 @@
 spring:
+  application:
+    name: iara-api-mongo
+
   data:
     mongodb:
-      uri: "mongodb+srv://iara:Iara260225@iara.zgedidw.mongodb.net/iara?retryWrites=true&w=majority&appName=IARA"
+      uri: ${MONGO_URI}
+
+springdoc:
+  swagger-ui:
+    path: /api-docs

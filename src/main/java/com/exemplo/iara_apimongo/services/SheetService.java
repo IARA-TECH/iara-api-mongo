@@ -40,7 +40,6 @@ public class SheetService extends BaseService<Sheet, String, SheetRequestDTO, Sh
     @Override
     protected SheetResponseDTO toResponse(Sheet entity) {
         if (entity.getShift() == null) {
-            // evitar NPE
             return SheetResponseDTO.builder()
                     .id(entity.getId())
                     .factoryId(entity.getFactoryId())
@@ -74,10 +73,4 @@ public class SheetService extends BaseService<Sheet, String, SheetRequestDTO, Sh
         entity.setShift(shift);
     }
 
-    public List<SheetResponseDTO> findByFactoryId(Integer factoryId) {
-        List<Sheet> sheets = sheetRepository.findByFactoryId(factoryId);
-        return sheets.stream()
-                .map(this::toResponse)
-                .collect(Collectors.toList());
-    }
 }
