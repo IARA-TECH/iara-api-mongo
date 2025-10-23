@@ -49,7 +49,7 @@ docker run -p 8080:8080 iara-api-mongo
 
 ```bash
 # Clone o repositório
-git clone https://github.com/carolteraoka/iara-api-mongo.git
+git clone https://github.com/IARA-TECH/iara-api-mongo.git
 
 # Entre na pasta
 cd iara-api-mongo
