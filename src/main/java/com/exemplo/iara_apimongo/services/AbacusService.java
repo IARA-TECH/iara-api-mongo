@@ -3,9 +3,12 @@ package com.exemplo.iara_apimongo.services;
 import com.exemplo.iara_apimongo.dto.abacusDTOs.AbacusRequestDTO;
 import com.exemplo.iara_apimongo.dto.abacusDTOs.AbacusResponseDTO;
 import com.exemplo.iara_apimongo.model.Abacus;
+import com.exemplo.iara_apimongo.model.Shift;
 import com.exemplo.iara_apimongo.repository.AbacusRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalTime;
 
 @Slf4j
 @Service

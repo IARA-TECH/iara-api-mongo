@@ -1,0 +1,4 @@
+spring:
+  data:
+    mongodb:
+      uri: "mongodb+srv://iara:Iara260225@iara.zgedidw.mongodb.net/iara?retryWrites=true&w=majority&appName=IARA"

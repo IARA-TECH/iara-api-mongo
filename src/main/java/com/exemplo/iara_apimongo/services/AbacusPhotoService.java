@@ -4,11 +4,15 @@ import com.exemplo.iara_apimongo.dto.abacusPhotoDTOs.AbacusPhotoRequestDTO;
 import com.exemplo.iara_apimongo.dto.abacusPhotoDTOs.AbacusPhotoResponseDTO;
 import com.exemplo.iara_apimongo.model.AbacusPhoto;
 import com.exemplo.iara_apimongo.model.AbacusPhoto.ShiftSummary;
+import com.exemplo.iara_apimongo.model.Abacus;
 import com.exemplo.iara_apimongo.repository.AbacusPhotoRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -27,6 +31,13 @@ public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusP
                 dto.getShiftEndsAt()
         );
 
+        List<ObjectId> linesAsObjectId = null;
+        if (dto.getLines() != null) {
+            linesAsObjectId = dto.getLines().stream()
+                    .map(ObjectId::new)
+                    .collect(Collectors.toList());
+        }
+
         return AbacusPhoto.builder()
                 .factoryId(dto.getFactoryId())
                 .abacusId(dto.getAbacusId())
@@ -35,16 +46,24 @@ public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusP
                 .takenAt(dto.getTakenAt())
                 .urlBlob(dto.getUrlBlob())
                 .validatedBy(dto.getValidatedBy())
-                .lines(dto.getLines())
+                .lines(linesAsObjectId)
                 .columns(dto.getColumns())
                 .values(dto.getValues())
                 .shift(shift)
                 .build();
     }
 
-
     @Override
     protected AbacusPhotoResponseDTO toResponse(AbacusPhoto entity) {
+        List<String> linesAsString = null;
+        if (entity.getLines() != null) {
+            linesAsString = entity.getLines().stream()
+                    .map(ObjectId::toHexString)
+                    .collect(Collectors.toList());
+        }
+
+        List<Abacus.AbacusColumn> columnsAsIs = entity.getColumns();
+
         return AbacusPhotoResponseDTO.builder()
                 .id(entity.getId())
                 .factoryId(entity.getFactoryId())
@@ -58,8 +77,8 @@ public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusP
                 .takenAt(entity.getTakenAt())
                 .urlBlob(entity.getUrlBlob())
                 .validatedBy(entity.getValidatedBy())
-                .lines(entity.getLines())
-                .columns(entity.getColumns())
+                .lines(linesAsString)
+                .columns(columnsAsIs)
                 .values(entity.getValues())
                 .build();
     }
@@ -72,7 +91,14 @@ public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusP
         entity.setTakenAt(dto.getTakenAt());
         entity.setUrlBlob(dto.getUrlBlob());
         entity.setValidatedBy(dto.getValidatedBy());
-        entity.setLines(dto.getLines());
+
+        if (dto.getLines() != null) {
+            List<ObjectId> linesAsObjectId = dto.getLines().stream()
+                    .map(ObjectId::new)
+                    .collect(Collectors.toList());
+            entity.setLines(linesAsObjectId);
+        }
+
         entity.setColumns(dto.getColumns());
         entity.setValues(dto.getValues());
         entity.setShift(new ShiftSummary(dto.getShiftId(), dto.getShiftName(), dto.getShiftStartsAt(), dto.getShiftEndsAt()));

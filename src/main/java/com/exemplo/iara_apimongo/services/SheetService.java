@@ -8,17 +8,27 @@ import com.exemplo.iara_apimongo.repository.SheetRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 public class SheetService extends BaseService<Sheet, String, SheetRequestDTO, SheetResponseDTO> {
 
+    private final SheetRepository sheetRepository;
+
     public SheetService(SheetRepository repository) {
         super(repository, "Sheet");
+        this.sheetRepository = repository;
     }
 
     @Override
     protected Sheet toEntity(SheetRequestDTO dto) {
-        ShiftSummary shift = new ShiftSummary(dto.getShiftId(), dto.getShiftName(), dto.getShiftStartsAt(), dto.getShiftEndsAt());
+        ShiftSummary shift = null;
+        if (dto.getShiftId() != null) {
+            shift = new ShiftSummary(dto.getShiftId(), dto.getShiftName(), dto.getShiftStartsAt(), dto.getShiftEndsAt());
+        }
+
         return Sheet.builder()
                 .factoryId(dto.getFactoryId())
                 .shift(shift)
@@ -29,6 +39,15 @@ public class SheetService extends BaseService<Sheet, String, SheetRequestDTO, Sh
 
     @Override
     protected SheetResponseDTO toResponse(Sheet entity) {
+        if (entity.getShift() == null) {
+            // evitar NPE
+            return SheetResponseDTO.builder()
+                    .id(entity.getId())
+                    .factoryId(entity.getFactoryId())
+                    .abacusPhotoIds(entity.getAbacusPhotos())
+                    .date(entity.getDate())
+                    .build();
+        }
         return SheetResponseDTO.builder()
                 .id(entity.getId())
                 .factoryId(entity.getFactoryId())
@@ -41,11 +60,24 @@ public class SheetService extends BaseService<Sheet, String, SheetRequestDTO, Sh
                 .build();
     }
 
+
     @Override
     protected void updateEntity(Sheet entity, SheetRequestDTO dto) {
         entity.setFactoryId(dto.getFactoryId());
         entity.setAbacusPhotos(dto.getAbacusPhotoIds());
         entity.setDate(dto.getDate());
-        entity.setShift(new ShiftSummary(dto.getShiftId(), dto.getShiftName(), dto.getShiftStartsAt(), dto.getShiftEndsAt()));
+
+        ShiftSummary shift = null;
+        if (dto.getShiftId() != null) {
+            shift = new ShiftSummary(dto.getShiftId(), dto.getShiftName(), dto.getShiftStartsAt(), dto.getShiftEndsAt());
+        }
+        entity.setShift(shift);
+    }
+
+    public List<SheetResponseDTO> findByFactoryId(Integer factoryId) {
+        List<Sheet> sheets = sheetRepository.findByFactoryId(factoryId);
+        return sheets.stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 }
