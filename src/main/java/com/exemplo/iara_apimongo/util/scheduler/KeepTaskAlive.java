@@ -9,7 +9,7 @@ public class KeepTaskAlive {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    @Scheduled(fixedRate = 6000)
+    @Scheduled(fixedRate = 600000)
     public void ping() {
         try {
             restTemplate.getForObject("https://iara-api-mongo.onrender.com/health", String.class);
