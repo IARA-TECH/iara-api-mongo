@@ -44,7 +44,7 @@ jobs:
           docker push $IMAGE_NAME:$IMAGE_TAG
           docker push $IMAGE_NAME:latest
 
-      - name: Deploy to Render
+      - name: Deploy on Render
         if: success()
         run: |
           echo "Triggering deployment on Render..."
