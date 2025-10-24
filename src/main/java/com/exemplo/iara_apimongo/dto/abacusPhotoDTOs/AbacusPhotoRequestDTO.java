@@ -1,47 +1,64 @@
 package com.exemplo.iara_apimongo.dto.abacusPhotoDTOs;
 
 import com.exemplo.iara_apimongo.model.Abacus;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Data
 public class AbacusPhotoRequestDTO {
+
+    @Schema(description = "ID of the factory where the photo was taken", example = "1")
     private int factoryId;
 
-    @NotBlank(message = "Shift ID is mandatory")
+    @Schema(description = "ID of the shift", example = "shift123")
+    @NotBlank(message = "Shift ID is mandatory.")
     private String shiftId;
 
-    @NotBlank(message = "Abacus ID is mandatory")
+    @Schema(description = "ID of the abacus", example = "abacus123")
+    @NotBlank(message = "Abacus ID is mandatory.")
     private String abacusId;
 
-    @NotBlank(message = "Taken by is mandatory")
+    @Schema(description = "Name of the person who took the photo", example = "John Doe")
+    @NotBlank(message = "Taken by is mandatory.")
     private String takenBy;
 
+    @Schema(description = "Date and time when the photo was taken", example = "2025-10-22T08:00:00")
     private LocalDateTime takenAt;
 
+    @Schema(description = "Optional date of the abacus entry", example = "2025-10-22T08:00:00")
     private LocalDateTime date;
 
-    @NotBlank(message = "URL blob is mandatory")
+    @Schema(description = "URL of the stored photo blob")
+    @NotBlank(message = "URL blob is mandatory.")
     private String urlBlob;
 
+    @Schema(description = "Name of the person who validated the photo", example = "Jane Doe")
     private String validatedBy;
 
-    @NotEmpty(message = "Lines cannot be empty")
+    @Schema(description = "Lines of the abacus")
+    @NotEmpty(message = "Lines cannot be empty.")
     private List<String> lines;
 
-    @NotEmpty(message = "Columns cannot be empty")
+    @Schema(description = "Columns of the abacus")
+    @NotEmpty(message = "Columns cannot be empty.")
     private List<Abacus.AbacusColumn> columns;
 
-    @NotEmpty(message = "Values cannot be empty")
+    @Schema(description = "Values in the abacus, organized by rows and columns")
+    @NotEmpty(message = "Values cannot be empty.")
     private List<List<Integer>> values;
 
-    // Shift info
+    @Schema(description = "Optional shift name", example = "Morning")
     private String shiftName;
+
+    @Schema(description = "Optional shift start time", example = "08:00")
     private String shiftStartsAt;
+
+    @Schema(description = "Optional shift end time", example = "12:00")
     private String shiftEndsAt;
 }
