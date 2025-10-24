@@ -1,22 +1,22 @@
 package com.exemplo.iara_apimongo.services;
 
-import com.exemplo.iara_apimongo.dto.abacusDTOs.AbacusRequestDTO;
-import com.exemplo.iara_apimongo.dto.abacusDTOs.AbacusResponseDTO;
-import com.exemplo.iara_apimongo.model.Abacus;
+import com.exemplo.iara_apimongo.model.dto.request.AbacusRequest;
+import com.exemplo.iara_apimongo.model.dto.response.AbacusResponse;
+import com.exemplo.iara_apimongo.model.database.Abacus;
 import com.exemplo.iara_apimongo.repository.AbacusRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class AbacusService extends BaseService<Abacus, String, AbacusRequestDTO, AbacusResponseDTO> {
+public class AbacusService extends BaseService<Abacus, String, AbacusRequest, AbacusResponse> {
 
     public AbacusService(AbacusRepository repository) {
         super(repository, "Abacus");
     }
 
     @Override
-    protected Abacus toEntity(AbacusRequestDTO dto) {
+    protected Abacus toEntity(AbacusRequest dto) {
         return Abacus.builder()
                 .factoryId(dto.getFactoryId())
                 .name(dto.getName())
@@ -27,8 +27,8 @@ public class AbacusService extends BaseService<Abacus, String, AbacusRequestDTO,
     }
 
     @Override
-    protected AbacusResponseDTO toResponse(Abacus entity) {
-        return AbacusResponseDTO.builder()
+    protected AbacusResponse toResponse(Abacus entity) {
+        return AbacusResponse.builder()
                 .id(entity.getId())
                 .factoryId(entity.getFactoryId())
                 .name(entity.getName())
@@ -39,7 +39,7 @@ public class AbacusService extends BaseService<Abacus, String, AbacusRequestDTO,
     }
 
     @Override
-    protected void updateEntity(Abacus entity, AbacusRequestDTO dto) {
+    protected void updateEntity(Abacus entity, AbacusRequest dto) {
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
         entity.setLines(dto.getLines());

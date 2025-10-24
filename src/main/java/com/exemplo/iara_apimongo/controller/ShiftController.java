@@ -1,7 +1,7 @@
 package com.exemplo.iara_apimongo.controller;
 
-import com.exemplo.iara_apimongo.dto.shiftDTOs.ShiftRequestDTO;
-import com.exemplo.iara_apimongo.dto.shiftDTOs.ShiftResponseDTO;
+import com.exemplo.iara_apimongo.model.dto.request.ShiftRequest;
+import com.exemplo.iara_apimongo.model.dto.response.ShiftResponse;
 import com.exemplo.iara_apimongo.exception.ApiResponse;
 import com.exemplo.iara_apimongo.services.ShiftService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,31 +25,31 @@ public class ShiftController {
 
     @Operation(summary = "Create a new shift")
     @PostMapping
-    public ResponseEntity<ApiResponse<ShiftResponseDTO>> create(@Valid @RequestBody ShiftRequestDTO dto) {
-        ShiftResponseDTO created = service.create(dto);
+    public ResponseEntity<ApiResponse<ShiftResponse>> create(@Valid @RequestBody ShiftRequest dto) {
+        ShiftResponse created = service.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.of("Shift created successfully", HttpStatus.CREATED.value(), created));
     }
 
     @Operation(summary = "Find a shift by ID")
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<ShiftResponseDTO>> findById(@PathVariable String id) {
-        ShiftResponseDTO found = service.findById(id);
+    public ResponseEntity<ApiResponse<ShiftResponse>> findById(@PathVariable String id) {
+        ShiftResponse found = service.findById(id);
         return ResponseEntity.ok(ApiResponse.of("Shift found", HttpStatus.OK.value(), found));
     }
 
     @Operation(summary = "List all shifts")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ShiftResponseDTO>>> findAll() {
-        List<ShiftResponseDTO> all = service.findAll();
+    public ResponseEntity<ApiResponse<List<ShiftResponse>>> findAll() {
+        List<ShiftResponse> all = service.findAll();
         return ResponseEntity.ok(ApiResponse.of("All shifts retrieved", HttpStatus.OK.value(), all));
     }
 
     @Operation(summary = "Update an existing shift")
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<ShiftResponseDTO>> update(@PathVariable String id,
-                                                                @Valid @RequestBody ShiftRequestDTO dto) {
-        ShiftResponseDTO updated = service.update(id, dto);
+    public ResponseEntity<ApiResponse<ShiftResponse>> update(@PathVariable String id,
+                                                             @Valid @RequestBody ShiftRequest dto) {
+        ShiftResponse updated = service.update(id, dto);
         return ResponseEntity.ok(ApiResponse.of("Shift updated successfully", HttpStatus.OK.value(), updated));
     }
 

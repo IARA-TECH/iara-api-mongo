@@ -1,4 +1,4 @@
-package com.exemplo.iara_apimongo.dto.dashboardsDTOs;
+package com.exemplo.iara_apimongo.model.dto.response.dashboard;
 
 import lombok.*;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -9,7 +9,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DashboardTurnosDTO {
+public class ShiftDashboard {
 
     @Schema(description = "Dashboard title", example = "Shift Overview")
     private String title;

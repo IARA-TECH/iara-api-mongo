@@ -1,4 +1,4 @@
-package com.exemplo.iara_apimongo.dto.dashboardsDTOs;
+package com.exemplo.iara_apimongo.model.dto.response.dashboard;
 
 import lombok.*;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -9,7 +9,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GenericDashboardDetailDTO {
+public class GenericDashboardDetail {
 
     @Schema(description = "Dashboard title", example = "Generic Dashboard")
     private String title;
@@ -24,19 +24,19 @@ public class GenericDashboardDetailDTO {
     private int previousComparison;
 
     @Schema(description = "Ranking of failure reasons")
-    private List<DashboardFalhasDTO.ReasonRankingDTO> failureReasonRanking;
+    private List<FailuresDashboard.ReasonRankingDTO> failureReasonRanking;
 
     @Schema(description = "Ranking of farm reasons")
-    private List<DashboardGranjaDTO.ReasonRankingDTO> farmReasonRanking;
+    private List<FarmDashboard.ReasonRankingDTO> farmReasonRanking;
 
     @Schema(description = "Data by factory")
-    private List<DashboardGranjaDTO.ByFactoryDTO> byFactory;
+    private List<FarmDashboard.ByFactoryDTO> byFactory;
 
     @Schema(description = "Monthly evolution")
-    private DashboardFalhasDTO.MonthlyEvolutionDTO monthlyEvolution;
+    private FailuresDashboard.MonthlyEvolutionDTO monthlyEvolution;
 
-    public DashboardFalhasDTO toDashboardFalhasDTO() {
-        return DashboardFalhasDTO.builder()
+    public FailuresDashboard toDashboardFalhasDTO() {
+        return FailuresDashboard.builder()
                 .title(title)
                 .total(total)
                 .averageRate(averageRate)
@@ -46,8 +46,8 @@ public class GenericDashboardDetailDTO {
                 .build();
     }
 
-    public DashboardGranjaDTO toDashboardGranjaDTO() {
-        return DashboardGranjaDTO.builder()
+    public FarmDashboard toDashboardGranjaDTO() {
+        return FarmDashboard.builder()
                 .title(title)
                 .total(total)
                 .averageRate(averageRate)

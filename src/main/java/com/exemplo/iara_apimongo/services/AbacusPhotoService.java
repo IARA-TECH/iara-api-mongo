@@ -1,9 +1,9 @@
 package com.exemplo.iara_apimongo.services;
 
-import com.exemplo.iara_apimongo.dto.abacusPhotoDTOs.AbacusPhotoRequestDTO;
-import com.exemplo.iara_apimongo.dto.abacusPhotoDTOs.AbacusPhotoResponseDTO;
-import com.exemplo.iara_apimongo.model.AbacusPhoto;
-import com.exemplo.iara_apimongo.model.AbacusPhoto.ShiftSummary;
+import com.exemplo.iara_apimongo.model.dto.request.AbacusPhotoRequest;
+import com.exemplo.iara_apimongo.model.dto.response.AbacusPhotoResponse;
+import com.exemplo.iara_apimongo.model.database.AbacusPhoto;
+import com.exemplo.iara_apimongo.model.database.AbacusPhoto.ShiftSummary;
 import com.exemplo.iara_apimongo.repository.AbacusPhotoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,14 +12,14 @@ import java.time.LocalDateTime;
 
 @Slf4j
 @Service
-public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusPhotoRequestDTO, AbacusPhotoResponseDTO> {
+public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusPhotoRequest, AbacusPhotoResponse> {
 
     public AbacusPhotoService(AbacusPhotoRepository repository) {
         super(repository, "AbacusPhoto");
     }
 
     @Override
-    protected AbacusPhoto toEntity(AbacusPhotoRequestDTO dto) {
+    protected AbacusPhoto toEntity(AbacusPhotoRequest dto) {
         ShiftSummary shift = new ShiftSummary(
                 dto.getShiftId(),
                 dto.getShiftName(),
@@ -44,8 +44,8 @@ public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusP
 
 
     @Override
-    protected AbacusPhotoResponseDTO toResponse(AbacusPhoto entity) {
-        return AbacusPhotoResponseDTO.builder()
+    protected AbacusPhotoResponse toResponse(AbacusPhoto entity) {
+        return AbacusPhotoResponse.builder()
                 .id(entity.getId())
                 .factoryId(entity.getFactoryId())
                 .shiftId(entity.getShift().getId())
@@ -65,7 +65,7 @@ public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusP
     }
 
     @Override
-    protected void updateEntity(AbacusPhoto entity, AbacusPhotoRequestDTO dto) {
+    protected void updateEntity(AbacusPhoto entity, AbacusPhotoRequest dto) {
         entity.setAbacusId(dto.getAbacusId());
         entity.setTakenBy(dto.getTakenBy());
         entity.setDate(dto.getDate() != null ? dto.getDate() : entity.getDate());

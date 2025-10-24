@@ -1,7 +1,7 @@
 package com.exemplo.iara_apimongo.services;
 
-import com.exemplo.iara_apimongo.dto.dashboardsDTOs.*;
-import com.exemplo.iara_apimongo.model.Shift;
+import com.exemplo.iara_apimongo.model.database.Shift;
+import com.exemplo.iara_apimongo.model.dto.response.dashboard.*;
 import com.exemplo.iara_apimongo.repository.ShiftRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -28,24 +28,24 @@ public class DashboardService {
                 .collect(Collectors.toMap(Shift::getId, Shift::getName, (a, b) -> a));
     }
 
-    public DashboardComparativoDTO getComparativo() {
+    public ComparativeDashboard getComparativo() {
         List<String> periods = Arrays.asList("Jan", "Feb", "Mar");
         List<Integer> technicalFailures = Arrays.asList(5, 3, 7);
         List<Integer> farmCondemnations = Arrays.asList(10, 8, 12);
 
-        DashboardComparativoDTO.TotalsDTO totals = new DashboardComparativoDTO.TotalsDTO(
+        ComparativeDashboard.TotalsDTO totals = new ComparativeDashboard.TotalsDTO(
                 farmCondemnations.stream().mapToInt(Integer::intValue).sum(),
                 technicalFailures.stream().mapToInt(Integer::intValue).sum()
         );
 
-        List<DashboardComparativoDTO.MonthlyRankingDTO> monthlyRanking = IntStream.range(0, periods.size())
-                .mapToObj(i -> new DashboardComparativoDTO.MonthlyRankingDTO(
+        List<ComparativeDashboard.MonthlyRankingDTO> monthlyRanking = IntStream.range(0, periods.size())
+                .mapToObj(i -> new ComparativeDashboard.MonthlyRankingDTO(
                         periods.get(i),
                         technicalFailures.get(i) + farmCondemnations.get(i)
                 ))
                 .collect(Collectors.toList());
 
-        return DashboardComparativoDTO.builder()
+        return ComparativeDashboard.builder()
                 .title("Monthly Comparison")
                 .periods(periods)
                 .technicalFailures(technicalFailures)
@@ -55,66 +55,66 @@ public class DashboardService {
                 .build();
     }
 
-    public DashboardTurnosDTO getTurnos() {
-        List<DashboardTurnosDTO.QuantityPerShiftDTO> quantityPerShift = getTotalQuantityPerShift();
-        DashboardTurnosDTO.MonthlyEvolutionDTO monthlyEvolution = getMonthlyEvolutionPerShift();
+    public ShiftDashboard getTurnos() {
+        List<ShiftDashboard.QuantityPerShiftDTO> quantityPerShift = getTotalQuantityPerShift();
+        ShiftDashboard.MonthlyEvolutionDTO monthlyEvolution = getMonthlyEvolutionPerShift();
 
-        return DashboardTurnosDTO.builder()
+        return ShiftDashboard.builder()
                 .title("Shift Dashboard")
                 .quantityPerShift(quantityPerShift)
                 .monthlyEvolution(monthlyEvolution)
                 .build();
     }
 
-    public DashboardFalhasDTO getFalhas() {
-        GenericDashboardDetailDTO generic = getDetailedDashboard();
+    public FailuresDashboard getFalhas() {
+        GenericDashboardDetail generic = getDetailedDashboard();
         return generic.toDashboardFalhasDTO();
     }
 
-    public DashboardGranjaDTO getGranja() {
-        GenericDashboardDetailDTO generic = getDetailedDashboard();
+    public FarmDashboard getGranja() {
+        GenericDashboardDetail generic = getDetailedDashboard();
         return generic.toDashboardGranjaDTO();
     }
 
-    private List<DashboardTurnosDTO.QuantityPerShiftDTO> getTotalQuantityPerShift() {
+    private List<ShiftDashboard.QuantityPerShiftDTO> getTotalQuantityPerShift() {
         return Arrays.asList(
-                new DashboardTurnosDTO.QuantityPerShiftDTO("Morning", 15),
-                new DashboardTurnosDTO.QuantityPerShiftDTO("Afternoon", 20),
-                new DashboardTurnosDTO.QuantityPerShiftDTO("Night", 10)
+                new ShiftDashboard.QuantityPerShiftDTO("Morning", 15),
+                new ShiftDashboard.QuantityPerShiftDTO("Afternoon", 20),
+                new ShiftDashboard.QuantityPerShiftDTO("Night", 10)
         );
     }
 
-    private DashboardTurnosDTO.MonthlyEvolutionDTO getMonthlyEvolutionPerShift() {
+    private ShiftDashboard.MonthlyEvolutionDTO getMonthlyEvolutionPerShift() {
         List<String> periods = Arrays.asList("Jan", "Feb", "Mar");
         List<Integer> morning = Arrays.asList(5, 6, 4);
         List<Integer> afternoon = Arrays.asList(7, 5, 8);
         List<Integer> night = Arrays.asList(3, 4, 2);
 
-        return new DashboardTurnosDTO.MonthlyEvolutionDTO(periods, morning, afternoon, night);
+        return new ShiftDashboard.MonthlyEvolutionDTO(periods, morning, afternoon, night);
     }
 
-    private GenericDashboardDetailDTO getDetailedDashboard() {
-        List<DashboardFalhasDTO.ReasonRankingDTO> failureRanking = Arrays.asList(
-                new DashboardFalhasDTO.ReasonRankingDTO("Reason A", 5),
-                new DashboardFalhasDTO.ReasonRankingDTO("Reason B", 3)
+    private GenericDashboardDetail getDetailedDashboard() {
+        List<FailuresDashboard.ReasonRankingDTO> failureRanking = Arrays.asList(
+                new FailuresDashboard.ReasonRankingDTO("Reason A", 5),
+                new FailuresDashboard.ReasonRankingDTO("Reason B", 3)
         );
 
-        List<DashboardGranjaDTO.ReasonRankingDTO> farmRanking = Arrays.asList(
-                new DashboardGranjaDTO.ReasonRankingDTO("Reason A", 7),
-                new DashboardGranjaDTO.ReasonRankingDTO("Reason B", 4)
+        List<FarmDashboard.ReasonRankingDTO> farmRanking = Arrays.asList(
+                new FarmDashboard.ReasonRankingDTO("Reason A", 7),
+                new FarmDashboard.ReasonRankingDTO("Reason B", 4)
         );
 
-        List<DashboardGranjaDTO.ByFactoryDTO> byFactory = Arrays.asList(
-                new DashboardGranjaDTO.ByFactoryDTO("Factory X", 7),
-                new DashboardGranjaDTO.ByFactoryDTO("Factory Y", 8)
+        List<FarmDashboard.ByFactoryDTO> byFactory = Arrays.asList(
+                new FarmDashboard.ByFactoryDTO("Factory X", 7),
+                new FarmDashboard.ByFactoryDTO("Factory Y", 8)
         );
 
-        DashboardFalhasDTO.MonthlyEvolutionDTO monthlyEvolution = new DashboardFalhasDTO.MonthlyEvolutionDTO(
+        FailuresDashboard.MonthlyEvolutionDTO monthlyEvolution = new FailuresDashboard.MonthlyEvolutionDTO(
                 Arrays.asList("Jan", "Feb", "Mar"),
                 Arrays.asList(5, 3, 7)
         );
 
-        return GenericDashboardDetailDTO.builder()
+        return GenericDashboardDetail.builder()
                 .title("Detailed Dashboard")
                 .total(15)
                 .averageRate(0.25)
