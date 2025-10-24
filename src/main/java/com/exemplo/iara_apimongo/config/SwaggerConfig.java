@@ -16,14 +16,15 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("IARA API - MongoDB")
-                        .description("API para gestão de turnos e horários da aplicação IARA")
+                        .description("API for managing shifts and schedules of the IARA application")
                         .version("1.0.0")
                         .contact(new Contact()
                                 .name("IARA")
-                                .email("iaratech.oficial@gmail.com "))
+                                .email("iaratech.oficial@gmail.com"))
                         .license(new License().name("Apache 2.0")))
                 .externalDocs(new ExternalDocumentation()
-                        .description("Documentação do Projeto no GitHub")
+                        .description("Project Documentation on GitHub")
                         .url("https://github.com/IARA-TECH/iara-api-mongo/"));
     }
 }
+

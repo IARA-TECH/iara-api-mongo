@@ -18,12 +18,12 @@ import java.util.List;
 @RequestMapping("/iara/api/abacus-photos")
 @CrossOrigin("*")
 @RequiredArgsConstructor
-@Tag(name = "Abacus Photos", description = "Operações relacionadas a fotos de ábacos")
+@Tag(name = "Abacus Photos", description = "Operations related to abacus photos")
 public class AbacusPhotoController {
 
     private final AbacusPhotoService service;
 
-    @Operation(summary = "Cria uma nova foto de ábaco")
+    @Operation(summary = "Create a new abacus photo")
     @PostMapping
     public ResponseEntity<ApiResponse<AbacusPhotoResponseDTO>> create(@Valid @RequestBody AbacusPhotoRequestDTO dto) {
         AbacusPhotoResponseDTO created = service.create(dto);
@@ -31,21 +31,21 @@ public class AbacusPhotoController {
                 .body(ApiResponse.of("Abacus photo created successfully", HttpStatus.CREATED.value(), created));
     }
 
-    @Operation(summary = "Busca uma foto de ábaco por ID")
+    @Operation(summary = "Find an abacus photo by ID")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<AbacusPhotoResponseDTO>> findById(@PathVariable String id) {
         AbacusPhotoResponseDTO found = service.findById(id);
         return ResponseEntity.ok(ApiResponse.of("Abacus photo found", HttpStatus.OK.value(), found));
     }
 
-    @Operation(summary = "Lista todas as fotos de ábacos")
+    @Operation(summary = "List all abacus photos")
     @GetMapping
     public ResponseEntity<ApiResponse<List<AbacusPhotoResponseDTO>>> findAll() {
         List<AbacusPhotoResponseDTO> all = service.findAll();
         return ResponseEntity.ok(ApiResponse.of("All abacus photos retrieved", HttpStatus.OK.value(), all));
     }
 
-    @Operation(summary = "Atualiza uma foto de ábaco existente")
+    @Operation(summary = "Update an existing abacus photo")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<AbacusPhotoResponseDTO>> update(@PathVariable String id,
                                                                       @Valid @RequestBody AbacusPhotoRequestDTO dto) {
@@ -53,7 +53,7 @@ public class AbacusPhotoController {
         return ResponseEntity.ok(ApiResponse.of("Abacus photo updated successfully", HttpStatus.OK.value(), updated));
     }
 
-    @Operation(summary = "Remove uma foto de ábaco por ID")
+    @Operation(summary = "Delete an abacus photo by ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
         service.delete(id);
