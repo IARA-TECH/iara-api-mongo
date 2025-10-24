@@ -1,0 +1,55 @@
+name: CI/CD Pipeline - Iara API Mongo
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Run Checkstyle (lint)
+        run: |
+          echo "Running Checkstyle..."
+          mvn checkstyle:checkstyle || true
+          echo "Checkstyle report generated at target/checkstyle-result.html"
+
+      - name: Build and Push Docker image
+        env:
+          IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/iara-api-mongo
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          echo "Building Docker image: $IMAGE_NAME:$IMAGE_TAG"
+          docker build -t $IMAGE_NAME:$IMAGE_TAG -t $IMAGE_NAME:latest .
+          echo "Pushing Docker image to Docker Hub..."
+          docker push $IMAGE_NAME:$IMAGE_TAG
+          docker push $IMAGE_NAME:latest
+
+      - name: Deploy to Render
+        if: success()
+        run: |
+          echo "Triggering deployment on Render..."
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+
+      - name: Deployment successful
+        if: success()
+        run: echo "CI/CD pipeline finished successfully!"
