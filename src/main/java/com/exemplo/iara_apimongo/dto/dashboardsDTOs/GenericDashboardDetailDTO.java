@@ -29,9 +29,6 @@ public class GenericDashboardDetailDTO {
     @Schema(description = "Ranking of farm reasons")
     private List<DashboardGranjaDTO.ReasonRankingDTO> farmReasonRanking;
 
-    @Schema(description = "Data by factory")
-    private List<DashboardGranjaDTO.ByFactoryDTO> byFactory;
-
     @Schema(description = "Monthly evolution")
     private DashboardFalhasDTO.MonthlyEvolutionDTO monthlyEvolution;
 
@@ -53,7 +50,6 @@ public class GenericDashboardDetailDTO {
                 .averageRate(averageRate)
                 .previousComparison(previousComparison)
                 .reasonRanking(farmReasonRanking)
-                .byFactory(byFactory)
                 .monthlyEvolution(monthlyEvolution)
                 .build();
     }

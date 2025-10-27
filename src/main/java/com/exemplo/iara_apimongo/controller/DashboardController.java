@@ -42,7 +42,7 @@ public class DashboardController {
 
     @GetMapping("/granja")
     @Operation(summary = "Returns the farm condemnations dashboard",
-            description = "Includes total, average rate, previous comparison, reasons ranking, quantity per factory, and monthly evolution")
+            description = "Includes total, average rate, previous comparison, reasons ranking, and monthly evolution")
     @ApiResponse(responseCode = "200", description = "Farm dashboard returned successfully")
     public DashboardGranjaDTO getGranja() {
         return dashboardService.getGranja();

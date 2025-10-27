@@ -104,11 +104,6 @@ public class DashboardService {
                 new DashboardGranjaDTO.ReasonRankingDTO("Reason B", 4)
         );
 
-        List<DashboardGranjaDTO.ByFactoryDTO> byFactory = Arrays.asList(
-                new DashboardGranjaDTO.ByFactoryDTO("Factory X", 7),
-                new DashboardGranjaDTO.ByFactoryDTO("Factory Y", 8)
-        );
-
         DashboardFalhasDTO.MonthlyEvolutionDTO monthlyEvolution = new DashboardFalhasDTO.MonthlyEvolutionDTO(
                 Arrays.asList("Jan", "Feb", "Mar"),
                 Arrays.asList(5, 3, 7)
@@ -121,7 +116,6 @@ public class DashboardService {
                 .previousComparison(10)
                 .failureReasonRanking(failureRanking)
                 .farmReasonRanking(farmRanking)
-                .byFactory(byFactory)
                 .monthlyEvolution(monthlyEvolution)
                 .build();
     }

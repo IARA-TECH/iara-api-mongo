@@ -1,5 +1,6 @@
 package com.exemplo.iara_apimongo.services;
 
+import com.exemplo.iara_apimongo.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -29,7 +30,7 @@ public abstract class BaseService<E, ID, Req, Res> {
     public Res findById(ID id) {
         log.info("[{}Service] findById id={}", entityName, id);
         E entity = repository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException(entityName + " with ID " + id + " not found."));
+                .orElseThrow(() -> new ResourceNotFoundException(entityName + " with ID " + id + " not found."));
         return toResponse(entity);
     }
 
@@ -44,7 +45,7 @@ public abstract class BaseService<E, ID, Req, Res> {
     public Res update(ID id, Req request) {
         log.info("[{}Service] update id={}", entityName, id);
         E entity = repository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException(entityName + " with ID " + id + " not found."));
+                .orElseThrow(() -> new ResourceNotFoundException(entityName + " with ID " + id + " not found."));
         updateEntity(entity, request);
         return toResponse(repository.save(entity));
     }
