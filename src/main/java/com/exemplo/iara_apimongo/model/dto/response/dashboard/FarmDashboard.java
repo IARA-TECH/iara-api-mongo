@@ -30,7 +30,7 @@ public class FarmDashboard {
     private List<ByFactoryDTO> byFactory;
 
     @Schema(description = "Monthly evolution of farm data")
-    private FailuresDashboard.MonthlyEvolutionDTO monthlyEvolution;
+    private FailuresDashboard.MonthlyEvolution monthlyEvolution;
 
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor
     @Schema(description = "Ranking of reasons for farm condemnations")

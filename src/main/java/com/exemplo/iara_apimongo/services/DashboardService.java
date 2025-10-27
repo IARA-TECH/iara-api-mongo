@@ -5,7 +5,6 @@ import com.exemplo.iara_apimongo.model.dto.response.dashboard.*;
 import com.exemplo.iara_apimongo.repository.ShiftRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -16,7 +15,6 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class DashboardService {
 
-    private final MongoTemplate mongoTemplate;
     private final ShiftRepository shiftRepository;
 
     private Map<String, String> shiftIdToNameMap = new HashMap<>();
@@ -28,18 +26,18 @@ public class DashboardService {
                 .collect(Collectors.toMap(Shift::getId, Shift::getName, (a, b) -> a));
     }
 
-    public ComparativeDashboard getComparativo() {
+    public ComparativeDashboard getComparative() {
         List<String> periods = Arrays.asList("Jan", "Feb", "Mar");
         List<Integer> technicalFailures = Arrays.asList(5, 3, 7);
         List<Integer> farmCondemnations = Arrays.asList(10, 8, 12);
 
-        ComparativeDashboard.TotalsDTO totals = new ComparativeDashboard.TotalsDTO(
+        ComparativeDashboard.DashboardTotals totals = new ComparativeDashboard.DashboardTotals(
                 farmCondemnations.stream().mapToInt(Integer::intValue).sum(),
                 technicalFailures.stream().mapToInt(Integer::intValue).sum()
         );
 
-        List<ComparativeDashboard.MonthlyRankingDTO> monthlyRanking = IntStream.range(0, periods.size())
-                .mapToObj(i -> new ComparativeDashboard.MonthlyRankingDTO(
+        List<ComparativeDashboard.MonthlyRanking> monthlyRanking = IntStream.range(0, periods.size())
+                .mapToObj(i -> new ComparativeDashboard.MonthlyRanking(
                         periods.get(i),
                         technicalFailures.get(i) + farmCondemnations.get(i)
                 ))
@@ -55,7 +53,7 @@ public class DashboardService {
                 .build();
     }
 
-    public ShiftDashboard getTurnos() {
+    public ShiftDashboard getShifts() {
         List<ShiftDashboard.QuantityPerShiftDTO> quantityPerShift = getTotalQuantityPerShift();
         ShiftDashboard.MonthlyEvolutionDTO monthlyEvolution = getMonthlyEvolutionPerShift();
 
@@ -66,12 +64,12 @@ public class DashboardService {
                 .build();
     }
 
-    public FailuresDashboard getFalhas() {
+    public FailuresDashboard getFailures() {
         GenericDashboardDetail generic = getDetailedDashboard();
         return generic.toDashboardFalhasDTO();
     }
 
-    public FarmDashboard getGranja() {
+    public FarmDashboard getFarm() {
         GenericDashboardDetail generic = getDetailedDashboard();
         return generic.toDashboardGranjaDTO();
     }
@@ -94,9 +92,9 @@ public class DashboardService {
     }
 
     private GenericDashboardDetail getDetailedDashboard() {
-        List<FailuresDashboard.ReasonRankingDTO> failureRanking = Arrays.asList(
-                new FailuresDashboard.ReasonRankingDTO("Reason A", 5),
-                new FailuresDashboard.ReasonRankingDTO("Reason B", 3)
+        List<FailuresDashboard.ReasonRanking> failureRanking = Arrays.asList(
+                new FailuresDashboard.ReasonRanking("Reason A", 5),
+                new FailuresDashboard.ReasonRanking("Reason B", 3)
         );
 
         List<FarmDashboard.ReasonRankingDTO> farmRanking = Arrays.asList(
@@ -109,7 +107,7 @@ public class DashboardService {
                 new FarmDashboard.ByFactoryDTO("Factory Y", 8)
         );
 
-        FailuresDashboard.MonthlyEvolutionDTO monthlyEvolution = new FailuresDashboard.MonthlyEvolutionDTO(
+        FailuresDashboard.MonthlyEvolution monthlyEvolution = new FailuresDashboard.MonthlyEvolution(
                 Arrays.asList("Jan", "Feb", "Mar"),
                 Arrays.asList(5, 3, 7)
         );

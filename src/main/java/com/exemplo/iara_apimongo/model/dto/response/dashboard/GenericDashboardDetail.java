@@ -24,7 +24,7 @@ public class GenericDashboardDetail {
     private int previousComparison;
 
     @Schema(description = "Ranking of failure reasons")
-    private List<FailuresDashboard.ReasonRankingDTO> failureReasonRanking;
+    private List<FailuresDashboard.ReasonRanking> failureReasonRanking;
 
     @Schema(description = "Ranking of farm reasons")
     private List<FarmDashboard.ReasonRankingDTO> farmReasonRanking;
@@ -33,7 +33,7 @@ public class GenericDashboardDetail {
     private List<FarmDashboard.ByFactoryDTO> byFactory;
 
     @Schema(description = "Monthly evolution")
-    private FailuresDashboard.MonthlyEvolutionDTO monthlyEvolution;
+    private FailuresDashboard.MonthlyEvolution monthlyEvolution;
 
     public FailuresDashboard toDashboardFalhasDTO() {
         return FailuresDashboard.builder()
