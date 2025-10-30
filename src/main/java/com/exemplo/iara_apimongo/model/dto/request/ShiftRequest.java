@@ -1,4 +1,4 @@
-package com.exemplo.iara_apimongo.dto.shiftDTOs;
+package com.exemplo.iara_apimongo.model.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
@@ -9,7 +9,7 @@ import lombok.Data;
 import java.time.LocalTime;
 
 @Data
-public class ShiftRequestDTO {
+public class ShiftRequest {
 
     @Schema(description = "Shift name", example = "Morning Shift")
     @NotBlank(message = "Shift name is required.")

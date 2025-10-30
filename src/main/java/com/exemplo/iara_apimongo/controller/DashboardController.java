@@ -1,6 +1,9 @@
 package com.exemplo.iara_apimongo.controller;
 
-import com.exemplo.iara_apimongo.dto.dashboardsDTOs.*;
+import com.exemplo.iara_apimongo.model.dto.response.dashboard.ComparativeDashboard;
+import com.exemplo.iara_apimongo.model.dto.response.dashboard.FailuresDashboard;
+import com.exemplo.iara_apimongo.model.dto.response.dashboard.FarmDashboard;
+import com.exemplo.iara_apimongo.model.dto.response.dashboard.ShiftDashboard;
 import com.exemplo.iara_apimongo.services.DashboardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,35 +19,35 @@ public class DashboardController {
 
     private final DashboardService dashboardService;
 
-    @GetMapping("/comparativo")
+    @GetMapping("/comparatives")
     @Operation(summary = "Returns the comparison of technical failures and condemnations of the farm",
             description = "Returns periods, technical failures, farm condemnations, totals, and monthly ranking")
     @ApiResponse(responseCode = "200", description = "Comparative dashboard returned successfully")
-    public DashboardComparativoDTO getComparativo() {
-        return dashboardService.getComparativo();
+    public ComparativeDashboard getComparative() {
+        return dashboardService.getComparative();
     }
 
-    @GetMapping("/turnos")
+    @GetMapping("/shifts")
     @Operation(summary = "Returns shift data",
             description = "Includes quantity per shift and monthly evolution of each shift")
     @ApiResponse(responseCode = "200", description = "Shift dashboard returned successfully")
-    public DashboardTurnosDTO getTurnos() {
-        return dashboardService.getTurnos();
+    public ShiftDashboard getShifts() {
+        return dashboardService.getShifts();
     }
 
-    @GetMapping("/falhas")
+    @GetMapping("/failures")
     @Operation(summary = "Returns technical failures dashboard",
             description = "Includes total failures, average rate, previous comparison, reasons ranking, and monthly evolution")
     @ApiResponse(responseCode = "200", description = "Technical failures dashboard returned successfully")
-    public DashboardFalhasDTO getFalhas() {
-        return dashboardService.getFalhas();
+    public FailuresDashboard getFailures() {
+        return dashboardService.getFailures();
     }
 
-    @GetMapping("/granja")
+    @GetMapping("/farms")
     @Operation(summary = "Returns the farm condemnations dashboard",
             description = "Includes total, average rate, previous comparison, reasons ranking, and monthly evolution")
     @ApiResponse(responseCode = "200", description = "Farm dashboard returned successfully")
-    public DashboardGranjaDTO getGranja() {
-        return dashboardService.getGranja();
+    public FarmDashboard getFarm() {
+        return dashboardService.getFarm();
     }
 }

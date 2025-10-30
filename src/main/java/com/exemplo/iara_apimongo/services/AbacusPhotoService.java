@@ -1,10 +1,9 @@
 package com.exemplo.iara_apimongo.services;
 
-import com.exemplo.iara_apimongo.dto.abacusPhotoDTOs.AbacusPhotoRequestDTO;
-import com.exemplo.iara_apimongo.dto.abacusPhotoDTOs.AbacusPhotoResponseDTO;
-import com.exemplo.iara_apimongo.model.AbacusPhoto;
-import com.exemplo.iara_apimongo.model.AbacusPhoto.ShiftSummary;
-import com.exemplo.iara_apimongo.model.Abacus;
+import com.exemplo.iara_apimongo.model.database.Abacus;
+import com.exemplo.iara_apimongo.model.database.AbacusPhoto;
+import com.exemplo.iara_apimongo.model.dto.request.AbacusPhotoRequest;
+import com.exemplo.iara_apimongo.model.dto.response.AbacusPhotoResponse;
 import com.exemplo.iara_apimongo.repository.AbacusPhotoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
@@ -16,15 +15,15 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusPhotoRequestDTO, AbacusPhotoResponseDTO> {
+public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusPhotoRequest, AbacusPhotoResponse> {
 
     public AbacusPhotoService(AbacusPhotoRepository repository) {
         super(repository, "AbacusPhoto");
     }
 
     @Override
-    protected AbacusPhoto toEntity(AbacusPhotoRequestDTO dto) {
-        ShiftSummary shift = new ShiftSummary(
+    protected AbacusPhoto toEntity(AbacusPhotoRequest dto) {
+        AbacusPhoto.ShiftSummary shift = new AbacusPhoto.ShiftSummary(
                 dto.getShiftId(),
                 dto.getShiftName(),
                 dto.getShiftStartsAt(),
@@ -54,7 +53,7 @@ public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusP
     }
 
     @Override
-    protected AbacusPhotoResponseDTO toResponse(AbacusPhoto entity) {
+    protected AbacusPhotoResponse toResponse(AbacusPhoto entity) {
         List<String> linesAsString = null;
         if (entity.getLines() != null) {
             linesAsString = entity.getLines().stream()
@@ -64,7 +63,7 @@ public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusP
 
         List<Abacus.AbacusColumn> columnsAsIs = entity.getColumns();
 
-        return AbacusPhotoResponseDTO.builder()
+        return AbacusPhotoResponse.builder()
                 .id(entity.getId())
                 .factoryId(entity.getFactoryId())
                 .shiftId(entity.getShift().getId())
@@ -84,7 +83,7 @@ public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusP
     }
 
     @Override
-    protected void updateEntity(AbacusPhoto entity, AbacusPhotoRequestDTO dto) {
+    protected void updateEntity(AbacusPhoto entity, AbacusPhotoRequest dto) {
         entity.setAbacusId(dto.getAbacusId());
         entity.setTakenBy(dto.getTakenBy());
         entity.setDate(dto.getDate() != null ? dto.getDate() : entity.getDate());
@@ -101,6 +100,6 @@ public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusP
 
         entity.setColumns(dto.getColumns());
         entity.setValues(dto.getValues());
-        entity.setShift(new ShiftSummary(dto.getShiftId(), dto.getShiftName(), dto.getShiftStartsAt(), dto.getShiftEndsAt()));
+        entity.setShift(new AbacusPhoto.ShiftSummary(dto.getShiftId(), dto.getShiftName(), dto.getShiftStartsAt(), dto.getShiftEndsAt()));
     }
 }

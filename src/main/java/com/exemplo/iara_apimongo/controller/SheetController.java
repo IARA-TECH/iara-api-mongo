@@ -1,7 +1,7 @@
 package com.exemplo.iara_apimongo.controller;
 
-import com.exemplo.iara_apimongo.dto.sheetDTOs.SheetRequestDTO;
-import com.exemplo.iara_apimongo.dto.sheetDTOs.SheetResponseDTO;
+import com.exemplo.iara_apimongo.model.dto.request.SheetRequest;
+import com.exemplo.iara_apimongo.model.dto.response.SheetResponse;
 import com.exemplo.iara_apimongo.exception.ApiResponse;
 import com.exemplo.iara_apimongo.services.SheetService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,31 +25,31 @@ public class SheetController {
 
     @Operation(summary = "Create a new production sheet")
     @PostMapping
-    public ResponseEntity<ApiResponse<SheetResponseDTO>> create(@Valid @RequestBody SheetRequestDTO dto) {
-        SheetResponseDTO created = service.create(dto);
+    public ResponseEntity<ApiResponse<SheetResponse>> create(@Valid @RequestBody SheetRequest dto) {
+        SheetResponse created = service.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.of("Sheet created successfully", HttpStatus.CREATED.value(), created));
     }
 
     @Operation(summary = "Find a sheet by ID")
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<SheetResponseDTO>> findById(@PathVariable String id) {
-        SheetResponseDTO found = service.findById(id);
+    public ResponseEntity<ApiResponse<SheetResponse>> findById(@PathVariable String id) {
+        SheetResponse found = service.findById(id);
         return ResponseEntity.ok(ApiResponse.of("Sheet found", HttpStatus.OK.value(), found));
     }
 
     @Operation(summary = "List all sheets")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<SheetResponseDTO>>> findAll() {
-        List<SheetResponseDTO> all = service.findAll();
+    public ResponseEntity<ApiResponse<List<SheetResponse>>> findAll() {
+        List<SheetResponse> all = service.findAll();
         return ResponseEntity.ok(ApiResponse.of("All sheets retrieved", HttpStatus.OK.value(), all));
     }
 
     @Operation(summary = "Update an existing sheet")
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<SheetResponseDTO>> update(@PathVariable String id,
-                                                                @Valid @RequestBody SheetRequestDTO dto) {
-        SheetResponseDTO updated = service.update(id, dto);
+    public ResponseEntity<ApiResponse<SheetResponse>> update(@PathVariable String id,
+                                                             @Valid @RequestBody SheetRequest dto) {
+        SheetResponse updated = service.update(id, dto);
         return ResponseEntity.ok(ApiResponse.of("Sheet updated successfully", HttpStatus.OK.value(), updated));
     }
 

@@ -1,7 +1,6 @@
-package com.exemplo.iara_apimongo.dto.abacusPhotoDTOs;
+package com.exemplo.iara_apimongo.model.dto.request;
 
-import com.exemplo.iara_apimongo.model.Abacus;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.exemplo.iara_apimongo.model.database.Abacus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -11,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-public class AbacusPhotoRequestDTO {
+public class AbacusPhotoRequest {
 
     @Schema(description = "ID of the factory where the photo was taken", example = "1")
     private int factoryId;

@@ -1,7 +1,7 @@
 package com.exemplo.iara_apimongo.controller;
 
-import com.exemplo.iara_apimongo.dto.abacusPhotoDTOs.AbacusPhotoRequestDTO;
-import com.exemplo.iara_apimongo.dto.abacusPhotoDTOs.AbacusPhotoResponseDTO;
+import com.exemplo.iara_apimongo.model.dto.request.AbacusPhotoRequest;
+import com.exemplo.iara_apimongo.model.dto.response.AbacusPhotoResponse;
 import com.exemplo.iara_apimongo.exception.ApiResponse;
 import com.exemplo.iara_apimongo.services.AbacusPhotoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,31 +25,31 @@ public class AbacusPhotoController {
 
     @Operation(summary = "Create a new abacus photo")
     @PostMapping
-    public ResponseEntity<ApiResponse<AbacusPhotoResponseDTO>> create(@Valid @RequestBody AbacusPhotoRequestDTO dto) {
-        AbacusPhotoResponseDTO created = service.create(dto);
+    public ResponseEntity<ApiResponse<AbacusPhotoResponse>> create(@Valid @RequestBody AbacusPhotoRequest dto) {
+        AbacusPhotoResponse created = service.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.of("Abacus photo created successfully", HttpStatus.CREATED.value(), created));
     }
 
     @Operation(summary = "Find an abacus photo by ID")
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<AbacusPhotoResponseDTO>> findById(@PathVariable String id) {
-        AbacusPhotoResponseDTO found = service.findById(id);
+    public ResponseEntity<ApiResponse<AbacusPhotoResponse>> findById(@PathVariable String id) {
+        AbacusPhotoResponse found = service.findById(id);
         return ResponseEntity.ok(ApiResponse.of("Abacus photo found", HttpStatus.OK.value(), found));
     }
 
     @Operation(summary = "List all abacus photos")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<AbacusPhotoResponseDTO>>> findAll() {
-        List<AbacusPhotoResponseDTO> all = service.findAll();
+    public ResponseEntity<ApiResponse<List<AbacusPhotoResponse>>> findAll() {
+        List<AbacusPhotoResponse> all = service.findAll();
         return ResponseEntity.ok(ApiResponse.of("All abacus photos retrieved", HttpStatus.OK.value(), all));
     }
 
     @Operation(summary = "Update an existing abacus photo")
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<AbacusPhotoResponseDTO>> update(@PathVariable String id,
-                                                                      @Valid @RequestBody AbacusPhotoRequestDTO dto) {
-        AbacusPhotoResponseDTO updated = service.update(id, dto);
+    public ResponseEntity<ApiResponse<AbacusPhotoResponse>> update(@PathVariable String id,
+                                                                   @Valid @RequestBody AbacusPhotoRequest dto) {
+        AbacusPhotoResponse updated = service.update(id, dto);
         return ResponseEntity.ok(ApiResponse.of("Abacus photo updated successfully", HttpStatus.OK.value(), updated));
     }
 
