@@ -1,8 +1,8 @@
 package com.exemplo.iara_apimongo.services;
 
+import com.exemplo.iara_apimongo.model.database.Abacus;
 import com.exemplo.iara_apimongo.model.dto.request.AbacusRequest;
 import com.exemplo.iara_apimongo.model.dto.response.AbacusResponse;
-import com.exemplo.iara_apimongo.model.database.Abacus;
 import com.exemplo.iara_apimongo.repository.AbacusRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -13,6 +13,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @Builder
 public class ShiftResponse {
+
     private String id;
     private String name;
     private LocalTime startsAt;

@@ -1,10 +1,11 @@
 spring:
-    application:
-        name: iara-api-mongo
+  application:
+    name: iara-api-mongo
 
-    data:
-        mongodb:
-            uri: ${MONGO_URI}
+  data:
+    mongodb:
+      uri: ${MONGO_URI}
+
 springdoc:
   swagger-ui:
     path: /api-docs

@@ -5,6 +5,7 @@ import com.exemplo.iara_apimongo.model.dto.response.dashboard.*;
 import com.exemplo.iara_apimongo.repository.ShiftRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -15,6 +16,7 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class DashboardService {
 
+    private final MongoTemplate mongoTemplate;
     private final ShiftRepository shiftRepository;
 
     private Map<String, String> shiftIdToNameMap = new HashMap<>();
@@ -66,12 +68,12 @@ public class DashboardService {
 
     public FailuresDashboard getFailures() {
         GenericDashboardDetail generic = getDetailedDashboard();
-        return generic.toDashboardFalhasDTO();
+        return generic.toFailuresDashboard();
     }
 
     public FarmDashboard getFarm() {
         GenericDashboardDetail generic = getDetailedDashboard();
-        return generic.toDashboardGranjaDTO();
+        return generic.toFarmDashboard();
     }
 
     private List<ShiftDashboard.QuantityPerShiftDTO> getTotalQuantityPerShift() {
@@ -97,14 +99,9 @@ public class DashboardService {
                 new FailuresDashboard.ReasonRanking("Reason B", 3)
         );
 
-        List<FarmDashboard.ReasonRankingDTO> farmRanking = Arrays.asList(
-                new FarmDashboard.ReasonRankingDTO("Reason A", 7),
-                new FarmDashboard.ReasonRankingDTO("Reason B", 4)
-        );
-
-        List<FarmDashboard.ByFactoryDTO> byFactory = Arrays.asList(
-                new FarmDashboard.ByFactoryDTO("Factory X", 7),
-                new FarmDashboard.ByFactoryDTO("Factory Y", 8)
+        List<FarmDashboard.ReasonRanking> farmRanking = Arrays.asList(
+                new FarmDashboard.ReasonRanking("Reason A", 7),
+                new FarmDashboard.ReasonRanking("Reason B", 4)
         );
 
         FailuresDashboard.MonthlyEvolution monthlyEvolution = new FailuresDashboard.MonthlyEvolution(
@@ -119,7 +116,6 @@ public class DashboardService {
                 .previousComparison(10)
                 .failureReasonRanking(failureRanking)
                 .farmReasonRanking(farmRanking)
-                .byFactory(byFactory)
                 .monthlyEvolution(monthlyEvolution)
                 .build();
     }

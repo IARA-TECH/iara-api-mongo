@@ -24,31 +24,18 @@ public class FarmDashboard {
     private int previousComparison;
 
     @Schema(description = "Ranking of condemnation reasons")
-    private List<ReasonRankingDTO> reasonRanking;
-
-    @Schema(description = "Data grouped by factory")
-    private List<ByFactoryDTO> byFactory;
+    private List<ReasonRanking> reasonRanking;
 
     @Schema(description = "Monthly evolution of farm data")
     private FailuresDashboard.MonthlyEvolution monthlyEvolution;
 
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor
     @Schema(description = "Ranking of reasons for farm condemnations")
-    public static class ReasonRankingDTO {
+    public static class ReasonRanking {
         @Schema(description = "Reason", example = "Contamination")
         private String reason;
 
         @Schema(description = "Number of occurrences", example = "5")
-        private int quantity;
-    }
-
-    @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-    @Schema(description = "Data by factory")
-    public static class ByFactoryDTO {
-        @Schema(description = "Factory name", example = "Factory A")
-        private String factory;
-
-        @Schema(description = "Number of occurrences", example = "15")
         private int quantity;
     }
 }

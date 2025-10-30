@@ -27,15 +27,12 @@ public class GenericDashboardDetail {
     private List<FailuresDashboard.ReasonRanking> failureReasonRanking;
 
     @Schema(description = "Ranking of farm reasons")
-    private List<FarmDashboard.ReasonRankingDTO> farmReasonRanking;
-
-    @Schema(description = "Data by factory")
-    private List<FarmDashboard.ByFactoryDTO> byFactory;
+    private List<FarmDashboard.ReasonRanking> farmReasonRanking;
 
     @Schema(description = "Monthly evolution")
     private FailuresDashboard.MonthlyEvolution monthlyEvolution;
 
-    public FailuresDashboard toDashboardFalhasDTO() {
+    public FailuresDashboard toFailuresDashboard() {
         return FailuresDashboard.builder()
                 .title(title)
                 .total(total)
@@ -46,14 +43,13 @@ public class GenericDashboardDetail {
                 .build();
     }
 
-    public FarmDashboard toDashboardGranjaDTO() {
+    public FarmDashboard toFarmDashboard() {
         return FarmDashboard.builder()
                 .title(title)
                 .total(total)
                 .averageRate(averageRate)
                 .previousComparison(previousComparison)
                 .reasonRanking(farmReasonRanking)
-                .byFactory(byFactory)
                 .monthlyEvolution(monthlyEvolution)
                 .build();
     }
