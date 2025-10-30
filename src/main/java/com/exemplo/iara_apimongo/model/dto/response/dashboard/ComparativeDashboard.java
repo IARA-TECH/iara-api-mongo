@@ -1,4 +1,4 @@
-package com.exemplo.iara_apimongo.dto.dashboardsDTOs;
+package com.exemplo.iara_apimongo.model.dto.response.dashboard;
 
 import lombok.*;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -9,7 +9,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DashboardComparativoDTO {
+public class ComparativeDashboard {
 
     @Schema(description = "Dashboard title", example = "Farm Comparison")
     private String title;
@@ -24,14 +24,14 @@ public class DashboardComparativoDTO {
     private List<Integer> farmCondemnations;
 
     @Schema(description = "Totals for technical failures and farm condemnations")
-    private TotalsDTO totals;
+    private DashboardTotals totals;
 
     @Schema(description = "Monthly ranking data")
-    private List<MonthlyRankingDTO> monthlyRanking;
+    private List<MonthlyRanking> monthlyRanking;
 
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor
     @Schema(description = "Total counts for dashboard")
-    public static class TotalsDTO {
+    public static class DashboardTotals {
         @Schema(description = "Total farm condemnations", example = "15")
         private int totalFarmCondemnations;
 
@@ -41,7 +41,7 @@ public class DashboardComparativoDTO {
 
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor
     @Schema(description = "Monthly ranking information")
-    public static class MonthlyRankingDTO {
+    public static class MonthlyRanking {
         @Schema(description = "Month", example = "Jan")
         private String month;
 

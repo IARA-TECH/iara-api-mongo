@@ -1,6 +1,6 @@
-package com.exemplo.iara_apimongo.dto.abacusDTOs;
+package com.exemplo.iara_apimongo.model.dto.request;
 
-import com.exemplo.iara_apimongo.model.Abacus;
+import com.exemplo.iara_apimongo.model.database.Abacus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -9,7 +9,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class AbacusRequestDTO {
+public class AbacusRequest {
 
     @Schema(description = "ID of the factory where the abacus belongs", example = "1")
     private int factoryId;

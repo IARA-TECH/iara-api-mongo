@@ -1,4 +1,4 @@
-package com.exemplo.iara_apimongo.model;
+package com.exemplo.iara_apimongo.model.database;
 
 import lombok.*;
 import org.bson.types.ObjectId;

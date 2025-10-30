@@ -1,4 +1,4 @@
-package com.exemplo.iara_apimongo.dto.sheetDTOs;
+package com.exemplo.iara_apimongo.model.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.util.List;
 
 @Data
-public class SheetRequestDTO {
+public class SheetRequest {
 
     @Schema(description = "ID of the factory where the sheet belongs", example = "1")
     private int factoryId;

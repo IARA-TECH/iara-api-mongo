@@ -1,4 +1,4 @@
-package com.exemplo.iara_apimongo.dto.shiftDTOs;
+package com.exemplo.iara_apimongo.model.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ShiftResponseDTO {
+public class ShiftResponse {
 
     private String id;
     private String name;
