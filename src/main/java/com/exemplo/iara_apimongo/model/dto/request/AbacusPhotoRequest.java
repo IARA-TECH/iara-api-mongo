@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class AbacusPhotoRequest {
     private String takenBy;
 
     @Schema(description = "Date and time when the photo was taken", example = "2025-10-30T08:47:00")
-    private LocalDateTime takenAt;
+    private Instant takenAt;
 
     @Schema(description = "Photo blob URL", example = "https://picsum.photos/437/714")
     @NotBlank(message = "Photo URL blob is mandatory.")

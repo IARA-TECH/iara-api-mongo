@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -83,20 +82,6 @@ public abstract class BaseService<E, ID, Req, Res> {
         log.info("[{}Service] delete id={}", entityName, id);
         repository.deleteById(id);
         log.info("[{}Service] delete id={} - done", entityName, id);
-    }
-
-    protected void safeUpdate(E entity, Map<String, Object> updates) {
-        updates.forEach((field, value) -> {
-            try {
-                var f = entity.getClass().getDeclaredField(field);
-                f.setAccessible(true);
-                f.set(entity, value);
-            } catch (NoSuchFieldException e) {
-                log.warn("[{}Service] safeUpdate - field '{}' not found", entityName, field);
-            } catch (IllegalAccessException e) {
-                log.error("[{}Service] safeUpdate - cannot access field '{}'", entityName, field);
-            }
-        });
     }
 
     private String summarize(Object obj) {

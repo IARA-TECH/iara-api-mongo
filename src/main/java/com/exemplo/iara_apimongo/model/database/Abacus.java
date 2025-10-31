@@ -1,7 +1,6 @@
 package com.exemplo.iara_apimongo.model.database;
 
 import lombok.*;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -38,8 +37,8 @@ public class Abacus {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AbacusColumn {
+        private String name;
         private String color;
         private Integer value;
-        private String name;
     }
 }

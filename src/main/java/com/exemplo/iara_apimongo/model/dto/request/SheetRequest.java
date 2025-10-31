@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
-import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -22,18 +21,8 @@ public class SheetRequest {
     @NotEmpty(message = "Abacus photo IDs cannot be empty.")
     private List<String> abacusPhotoIds;
 
-    @Schema(description = "Date of the sheet", example = "2025-10-30T11:44:18.873Z")
-    private Instant date;
-
     @Schema(description = "Sheet blob URL", example = "https://placekitten.com/196/314")
     private String sheetUrlBlob;
-
-    @Schema(description = "Shift name", example = "Noturno")
-    private String shiftName;
-
-    @Schema(description = "Shift start time", example = "18:00")
-    private String shiftStartsAt;
-
-    @Schema(description = "Shift end time", example = "23:59")
-    private String shiftEndsAt;
 }
+
+

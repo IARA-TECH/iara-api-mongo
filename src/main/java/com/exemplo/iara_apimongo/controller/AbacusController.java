@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/iara/api/v1/abacuses")
+@RequestMapping("/iara/api/abacuses")
 @CrossOrigin("*")
 @RequiredArgsConstructor
 @Tag(name = "Abacuses", description = "Operations related to abacuses")

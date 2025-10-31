@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/iara/api/v1/sheets")
+@RequestMapping("/iara/api/sheets")
 @CrossOrigin("*")
 @RequiredArgsConstructor
 @Tag(name = "Sheets", description = "Operations related to production sheets")
@@ -43,14 +43,6 @@ public class SheetController {
     public ResponseEntity<ApiResponse<List<SheetResponse>>> findAll() {
         List<SheetResponse> all = service.findAll();
         return ResponseEntity.ok(ApiResponse.of("All sheets retrieved", HttpStatus.OK.value(), all));
-    }
-
-    @Operation(summary = "Update an existing sheet")
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<SheetResponse>> update(@PathVariable String id,
-                                                             @Valid @RequestBody SheetRequest dto) {
-        SheetResponse updated = service.update(id, dto);
-        return ResponseEntity.ok(ApiResponse.of("Sheet updated successfully", HttpStatus.OK.value(), updated));
     }
 
     @Operation(summary = "Delete a sheet by ID")

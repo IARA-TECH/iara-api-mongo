@@ -7,6 +7,7 @@ import com.exemplo.iara_apimongo.repository.ShiftRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalTime;
 
 @Slf4j
@@ -28,8 +29,8 @@ public class ShiftService extends BaseService<Shift, String, ShiftRequest, Shift
 
     @Override
     protected ShiftResponse toResponse(Shift entity) {
-        LocalTime start = LocalTime.parse(entity.getStartsAt());
-        LocalTime end = LocalTime.parse(entity.getEndsAt());
+        Instant start = Instant.parse(entity.getStartsAt());
+        Instant end = Instant.parse(entity.getEndsAt());
 
         return ShiftResponse.builder()
                 .id(entity.getId())

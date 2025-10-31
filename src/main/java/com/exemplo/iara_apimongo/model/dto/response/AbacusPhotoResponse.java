@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class AbacusPhotoResponse {
     private String id;
     private int factoryId;
     private String takenBy;
-    private LocalDateTime takenAt;
+    private Instant takenAt;
     private String validatedBy;
     private String photoUrlBlob;
     private String sheetUrlBlob;
@@ -27,5 +28,5 @@ public class AbacusPhotoResponse {
     private String shiftName;
     private String shiftStartsAt;
     private String shiftEndsAt;
-    private LocalDateTime shiftCreatedAt;
+    private Instant shiftCreatedAt;
 }
