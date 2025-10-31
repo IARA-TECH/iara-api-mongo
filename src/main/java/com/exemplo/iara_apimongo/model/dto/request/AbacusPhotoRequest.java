@@ -27,18 +27,9 @@ public class AbacusPhotoRequest {
     @NotBlank(message = "Taken by is mandatory.")
     private String takenBy;
 
-    @Schema(description = "Date and time when the photo was taken", example = "2025-10-22T08:00:00")
-    private LocalDateTime takenAt;
-
-    @Schema(description = "Optional date of the abacus entry", example = "2025-10-22T08:00:00")
-    private LocalDateTime date;
-
     @Schema(description = "URL of the stored photo blob")
     @NotBlank(message = "URL blob is mandatory.")
-    private String urlBlob;
-
-    @Schema(description = "Name of the person who validated the photo", example = "Jane Doe")
-    private String validatedBy;
+    private String photoUrlBlob;
 
     @Schema(description = "Lines of the abacus")
     @NotEmpty(message = "Lines cannot be empty.")
@@ -47,17 +38,4 @@ public class AbacusPhotoRequest {
     @Schema(description = "Columns of the abacus")
     @NotEmpty(message = "Columns cannot be empty.")
     private List<Abacus.AbacusColumn> columns;
-
-    @Schema(description = "Values in the abacus, organized by rows and columns")
-    @NotEmpty(message = "Values cannot be empty.")
-    private List<List<Integer>> values;
-
-    @Schema(description = "Optional shift name", example = "Morning")
-    private String shiftName;
-
-    @Schema(description = "Optional shift start time", example = "08:00")
-    private String shiftStartsAt;
-
-    @Schema(description = "Optional shift end time", example = "12:00")
-    private String shiftEndsAt;
 }

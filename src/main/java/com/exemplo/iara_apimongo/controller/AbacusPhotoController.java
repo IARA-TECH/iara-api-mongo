@@ -45,14 +45,6 @@ public class AbacusPhotoController {
         return ResponseEntity.ok(ApiResponse.of("All abacus photos retrieved", HttpStatus.OK.value(), all));
     }
 
-    @Operation(summary = "Update an existing abacus photo")
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<AbacusPhotoResponse>> update(@PathVariable String id,
-                                                                   @Valid @RequestBody AbacusPhotoRequest dto) {
-        AbacusPhotoResponse updated = service.update(id, dto);
-        return ResponseEntity.ok(ApiResponse.of("Abacus photo updated successfully", HttpStatus.OK.value(), updated));
-    }
-
     @Operation(summary = "Delete an abacus photo by ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {

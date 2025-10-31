@@ -21,11 +21,9 @@ public class AbacusPhotoResponse {
     private String takenBy;
     private LocalDateTime takenAt;
     private LocalDateTime date;
-    private String urlBlob;
+    private String photoUrlBlob;
+    private String sheetUrlBlob;
     private String validatedBy;
-    private List<String> lines;
-    private List<Abacus.AbacusColumn> columns;
-    private List<List<Integer>> values;
     private String shiftName;
     private String shiftStartsAt;
     private String shiftEndsAt;
