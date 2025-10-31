@@ -1,8 +1,8 @@
 package com.exemplo.iara_apimongo.model.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.time.Instant;
@@ -11,26 +11,29 @@ import java.util.List;
 @Data
 public class SheetRequest {
 
-    @Schema(description = "ID of the factory where the sheet belongs", example = "1")
+    @Schema(description = "Factory ID", example = "1")
     private int factoryId;
 
-    @Schema(description = "ID of the shift", example = "shift123")
+    @Schema(description = "Shift ID", example = "shift123")
     @NotBlank(message = "Shift ID is mandatory.")
     private String shiftId;
 
-    @Schema(description = "List of abacus photo IDs included in this sheet")
+    @Schema(description = "IDs of abacus photos in this sheet")
     @NotEmpty(message = "Abacus photo IDs cannot be empty.")
     private List<String> abacusPhotoIds;
 
-    @Schema(description = "Date of the sheet", example = "2025-10-22T08:00:00Z")
+    @Schema(description = "Date of the sheet", example = "2025-10-30T11:44:18.873Z")
     private Instant date;
 
-    @Schema(description = "Optional shift name", example = "Morning")
+    @Schema(description = "Sheet blob URL", example = "https://placekitten.com/196/314")
+    private String sheetUrlBlob;
+
+    @Schema(description = "Shift name", example = "Noturno")
     private String shiftName;
 
-    @Schema(description = "Optional shift start time", example = "08:00")
+    @Schema(description = "Shift start time", example = "18:00")
     private String shiftStartsAt;
 
-    @Schema(description = "Optional shift end time", example = "12:00")
+    @Schema(description = "Shift end time", example = "23:59")
     private String shiftEndsAt;
 }

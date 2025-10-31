@@ -16,17 +16,16 @@ import java.util.List;
 public class AbacusPhotoResponse {
     private String id;
     private int factoryId;
-    private String shiftId;
-    private String abacusId;
     private String takenBy;
     private LocalDateTime takenAt;
-    private LocalDateTime date;
-    private String urlBlob;
     private String validatedBy;
-    private List<String> lines;
-    private List<Abacus.AbacusColumn> columns;
+    private String photoUrlBlob;
+    private String sheetUrlBlob;
+    private Abacus abacus;
     private List<List<Integer>> values;
+    private String shiftId;
     private String shiftName;
     private String shiftStartsAt;
     private String shiftEndsAt;
+    private LocalDateTime shiftCreatedAt;
 }

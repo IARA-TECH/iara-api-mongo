@@ -21,7 +21,7 @@ public class AbacusService extends BaseService<Abacus, String, AbacusRequest, Ab
                 .factoryId(dto.getFactoryId())
                 .name(dto.getName())
                 .description(dto.getDescription())
-                .lines(dto.getLines())
+                .lines(dto.getLines()) // agora é List<AbacusLine>
                 .columns(dto.getColumns())
                 .build();
     }

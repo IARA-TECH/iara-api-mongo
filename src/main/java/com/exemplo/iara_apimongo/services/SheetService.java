@@ -8,25 +8,27 @@ import com.exemplo.iara_apimongo.repository.SheetRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.time.LocalDateTime;
 
 @Slf4j
 @Service
 public class SheetService extends BaseService<Sheet, String, SheetRequest, SheetResponse> {
 
-    private final SheetRepository sheetRepository;
-
     public SheetService(SheetRepository repository) {
         super(repository, "Sheet");
-        this.sheetRepository = repository;
     }
 
     @Override
     protected Sheet toEntity(SheetRequest dto) {
         AbacusPhoto.ShiftSummary shift = null;
         if (dto.getShiftId() != null) {
-            shift = new AbacusPhoto.ShiftSummary(dto.getShiftId(), dto.getShiftName(), dto.getShiftStartsAt(), dto.getShiftEndsAt());
+            shift = new AbacusPhoto.ShiftSummary(
+                    dto.getShiftId(),
+                    dto.getShiftName(),
+                    dto.getShiftStartsAt(),
+                    dto.getShiftEndsAt(),
+                    LocalDateTime.now()
+            );
         }
 
         return Sheet.builder()
@@ -39,26 +41,17 @@ public class SheetService extends BaseService<Sheet, String, SheetRequest, Sheet
 
     @Override
     protected SheetResponse toResponse(Sheet entity) {
-        if (entity.getShift() == null) {
-            return SheetResponse.builder()
-                    .id(entity.getId())
-                    .factoryId(entity.getFactoryId())
-                    .abacusPhotoIds(entity.getAbacusPhotos())
-                    .date(entity.getDate())
-                    .build();
-        }
         return SheetResponse.builder()
                 .id(entity.getId())
                 .factoryId(entity.getFactoryId())
-                .shiftId(entity.getShift().getId())
-                .shiftName(entity.getShift().getName())
-                .shiftStartsAt(entity.getShift().getStartsAt())
-                .shiftEndsAt(entity.getShift().getEndsAt())
+                .shiftId(entity.getShift() != null ? entity.getShift().getId() : null)
+                .shiftName(entity.getShift() != null ? entity.getShift().getName() : null)
+                .shiftStartsAt(entity.getShift() != null ? entity.getShift().getStartsAt() : null)
+                .shiftEndsAt(entity.getShift() != null ? entity.getShift().getEndsAt() : null)
                 .abacusPhotoIds(entity.getAbacusPhotos())
                 .date(entity.getDate())
                 .build();
     }
-
 
     @Override
     protected void updateEntity(Sheet entity, SheetRequest dto) {
@@ -68,9 +61,14 @@ public class SheetService extends BaseService<Sheet, String, SheetRequest, Sheet
 
         AbacusPhoto.ShiftSummary shift = null;
         if (dto.getShiftId() != null) {
-            shift = new AbacusPhoto.ShiftSummary(dto.getShiftId(), dto.getShiftName(), dto.getShiftStartsAt(), dto.getShiftEndsAt());
+            shift = new AbacusPhoto.ShiftSummary(
+                    dto.getShiftId(),
+                    dto.getShiftName(),
+                    dto.getShiftStartsAt(),
+                    dto.getShiftEndsAt(),
+                    LocalDateTime.now()
+            );
         }
         entity.setShift(shift);
     }
-
 }

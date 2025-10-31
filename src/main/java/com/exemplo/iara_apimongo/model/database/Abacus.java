@@ -1,6 +1,7 @@
 package com.exemplo.iara_apimongo.model.database;
 
 import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -20,8 +21,18 @@ public class Abacus {
     private Integer factoryId;
     private String name;
     private String description;
-    private List<String> lines;
+    private List<AbacusLine> lines;
     private List<AbacusColumn> columns;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AbacusLine {
+        private String name;
+
+        @Field("line_type")
+        private LineType lineType;
+    }
 
     @Data
     @NoArgsConstructor
@@ -29,5 +40,6 @@ public class Abacus {
     public static class AbacusColumn {
         private String color;
         private Integer value;
+        private String name;
     }
 }

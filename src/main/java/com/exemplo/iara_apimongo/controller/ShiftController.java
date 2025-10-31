@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/iara/api/shifts")
+@RequestMapping("/iara/api/v1/shifts")
 @CrossOrigin("*")
 @RequiredArgsConstructor
 @Tag(name = "Shifts", description = "Operations related to shifts")
@@ -55,8 +55,8 @@ public class ShiftController {
 
     @Operation(summary = "Delete a shift by ID")
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<Void> delete(@PathVariable String id) {
         service.delete(id);
-        return ResponseEntity.ok(ApiResponse.of("Shift deleted successfully", HttpStatus.OK.value(), null));
+        return ResponseEntity.noContent().build();
     }
 }

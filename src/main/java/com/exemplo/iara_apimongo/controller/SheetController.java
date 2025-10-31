@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/iara/api/sheets")
+@RequestMapping("/iara/api/v1/sheets")
 @CrossOrigin("*")
 @RequiredArgsConstructor
 @Tag(name = "Sheets", description = "Operations related to production sheets")
@@ -55,8 +55,8 @@ public class SheetController {
 
     @Operation(summary = "Delete a sheet by ID")
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<Void> delete(@PathVariable String id) {
         service.delete(id);
-        return ResponseEntity.ok(ApiResponse.of("Sheet deleted successfully", HttpStatus.OK.value(), null));
+        return ResponseEntity.noContent().build();
     }
 }

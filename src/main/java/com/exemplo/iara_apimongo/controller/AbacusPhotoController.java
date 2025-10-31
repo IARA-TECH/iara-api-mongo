@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/iara/api/abacus-photos")
+@RequestMapping("/iara/api/v1/abacus-photos")
 @CrossOrigin("*")
 @RequiredArgsConstructor
 @Tag(name = "Abacus Photos", description = "Operations related to abacus photos")
@@ -55,8 +55,8 @@ public class AbacusPhotoController {
 
     @Operation(summary = "Delete an abacus photo by ID")
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<Void> delete(@PathVariable String id) {
         service.delete(id);
-        return ResponseEntity.ok(ApiResponse.of("Abacus photo deleted successfully", HttpStatus.OK.value(), null));
+        return ResponseEntity.noContent().build();
     }
 }

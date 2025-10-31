@@ -6,8 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,38 +23,85 @@ public abstract class BaseService<E, ID, Req, Res> {
     protected abstract void updateEntity(E entity, Req request);
 
     public List<Res> findAll() {
-        log.info("[{}Service] findAll", entityName);
-        return repository.findAll().stream()
+        Instant start = Instant.now();
+        log.info("[{}Service] findAll - started", entityName);
+
+        List<Res> results = repository.findAll().stream()
                 .map(this::toResponse)
                 .toList();
+
+        log.info("[{}Service] findAll - {} results in {}ms",
+                entityName, results.size(), Duration.between(start, Instant.now()).toMillis());
+
+        return results;
     }
 
     public Res findById(ID id) {
+        Instant start = Instant.now();
         log.info("[{}Service] findById id={}", entityName, id);
+
         E entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(entityName + " with ID " + id + " not found."));
+
+        log.info("[{}Service] findById id={} - found in {}ms",
+                entityName, id, Duration.between(start, Instant.now()).toMillis());
+
         return toResponse(entity);
     }
 
     @Transactional
     public Res create(Req request) {
-        log.info("[{}Service] create", entityName);
+        Instant start = Instant.now();
+        log.info("[{}Service] create - request={}", entityName, summarize(request));
+
         E entity = toEntity(request);
-        return toResponse(repository.save(entity));
+        Res response = toResponse(repository.save(entity));
+
+        log.info("[{}Service] create - done in {}ms", entityName,
+                Duration.between(start, Instant.now()).toMillis());
+        return response;
     }
 
     @Transactional
     public Res update(ID id, Req request) {
-        log.info("[{}Service] update id={}", entityName, id);
+        Instant start = Instant.now();
+        log.info("[{}Service] update id={} - request={}", entityName, id, summarize(request));
+
         E entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(entityName + " with ID " + id + " not found."));
+
         updateEntity(entity, request);
-        return toResponse(repository.save(entity));
+        Res response = toResponse(repository.save(entity));
+
+        log.info("[{}Service] update id={} - done in {}ms", entityName, id,
+                Duration.between(start, Instant.now()).toMillis());
+        return response;
     }
 
     @Transactional
     public void delete(ID id) {
         log.info("[{}Service] delete id={}", entityName, id);
         repository.deleteById(id);
+        log.info("[{}Service] delete id={} - done", entityName, id);
+    }
+
+    protected void safeUpdate(E entity, Map<String, Object> updates) {
+        updates.forEach((field, value) -> {
+            try {
+                var f = entity.getClass().getDeclaredField(field);
+                f.setAccessible(true);
+                f.set(entity, value);
+            } catch (NoSuchFieldException e) {
+                log.warn("[{}Service] safeUpdate - field '{}' not found", entityName, field);
+            } catch (IllegalAccessException e) {
+                log.error("[{}Service] safeUpdate - cannot access field '{}'", entityName, field);
+            }
+        });
+    }
+
+    private String summarize(Object obj) {
+        if (obj == null) return "null";
+        String s = obj.toString();
+        return s.length() > 200 ? s.substring(0, 200) + "..." : s;
     }
 }

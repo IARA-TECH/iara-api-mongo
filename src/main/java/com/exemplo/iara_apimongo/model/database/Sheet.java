@@ -27,4 +27,7 @@ public class Sheet {
 
     @Field("abacus_photos")
     private List<String> abacusPhotos;
+
+    @Field("sheet_url_blob")
+    private String sheetUrlBlob;
 }
