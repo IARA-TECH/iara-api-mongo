@@ -1,6 +1,7 @@
 package com.exemplo.iara_apimongo.controller;
 
 import com.exemplo.iara_apimongo.model.dto.request.AbacusPhotoRequest;
+import com.exemplo.iara_apimongo.model.dto.request.ValidationRequest;
 import com.exemplo.iara_apimongo.model.dto.response.AbacusPhotoResponse;
 import com.exemplo.iara_apimongo.exception.ApiResponse;
 import com.exemplo.iara_apimongo.services.AbacusPhotoService;
@@ -51,4 +52,11 @@ public class AbacusPhotoController {
         service.delete(id);
         return ResponseEntity.ok(ApiResponse.of("Abacus photo deleted successfully", HttpStatus.OK.value(), null));
     }
+
+    @Operation(summary = "Validate sheet")
+    @PutMapping("/validation/{id}")
+    public ResponseEntity<ApiResponse<AbacusPhotoResponse>> validate(@PathVariable String id, @Valid @RequestBody ValidationRequest request) {
+        return ResponseEntity.ok(ApiResponse.of("Sheet validated successfully", HttpStatus.OK.value(), service.validate(id, request)));
+    }
+
 }
