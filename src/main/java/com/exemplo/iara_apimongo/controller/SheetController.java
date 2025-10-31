@@ -45,14 +45,6 @@ public class SheetController {
         return ResponseEntity.ok(ApiResponse.of("All sheets retrieved", HttpStatus.OK.value(), all));
     }
 
-    @Operation(summary = "Update an existing sheet")
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<SheetResponse>> update(@PathVariable String id,
-                                                             @Valid @RequestBody SheetRequest dto) {
-        SheetResponse updated = service.update(id, dto);
-        return ResponseEntity.ok(ApiResponse.of("Sheet updated successfully", HttpStatus.OK.value(), updated));
-    }
-
     @Operation(summary = "Delete a sheet by ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {

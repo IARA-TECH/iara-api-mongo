@@ -18,7 +18,6 @@ public abstract class BaseService<E, ID, Req, Res> {
 
     protected abstract E toEntity(Req request);
     protected abstract Res toResponse(E entity);
-    protected abstract void updateEntity(E entity, Req request);
 
     public List<Res> findAll() {
         log.info("[{}Service] findAll", entityName);
@@ -46,7 +45,11 @@ public abstract class BaseService<E, ID, Req, Res> {
         log.info("[{}Service] update id={}", entityName, id);
         E entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(entityName + " with ID " + id + " not found."));
-        updateEntity(entity, request);
+        try {
+            updateEntity(entity, request);
+        } catch (Exception e) {
+            return null;
+        }
         return toResponse(repository.save(entity));
     }
 
@@ -55,4 +58,9 @@ public abstract class BaseService<E, ID, Req, Res> {
         log.info("[{}Service] delete id={}", entityName, id);
         repository.deleteById(id);
     }
+
+    protected void updateEntity(E entity, Req request){
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

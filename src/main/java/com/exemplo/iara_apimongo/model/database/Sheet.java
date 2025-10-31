@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -20,10 +21,11 @@ public class Sheet {
     @Field("factory_id")
     private Integer factoryId;
 
-    @Field("shift_id")
-    private AbacusPhoto.ShiftSummary shift;
+    private Shift shift;
 
-    private Instant date;
+    private LocalDateTime date;
+
+    private String sheetUrlBlob;
 
     @Field("abacus_photos")
     private List<String> abacusPhotos;
