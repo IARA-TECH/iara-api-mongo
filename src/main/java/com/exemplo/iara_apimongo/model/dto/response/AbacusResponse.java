@@ -17,6 +17,6 @@ public class AbacusResponse {
     private int factoryId;
     private String name;
     private String description;
-    private List<String> lines;
+    private List<Abacus.AbacusLine> lines;
     private List<Abacus.AbacusColumn> columns;
 }

@@ -16,13 +16,13 @@ public class AbacusService extends BaseService<Abacus, String, AbacusRequest, Ab
     }
 
     @Override
-    protected Abacus toEntity(AbacusRequest dto) {
+    protected Abacus toEntity(AbacusRequest request) {
         return Abacus.builder()
-                .factoryId(dto.getFactoryId())
-                .name(dto.getName())
-                .description(dto.getDescription())
-                .lines(dto.getLines())
-                .columns(dto.getColumns())
+                .factoryId(request.getFactoryId())
+                .name(request.getName())
+                .description(request.getDescription())
+                .lines(request.getLines())
+                .columns(request.getColumns())
                 .build();
     }
 
@@ -39,10 +39,10 @@ public class AbacusService extends BaseService<Abacus, String, AbacusRequest, Ab
     }
 
     @Override
-    protected void updateEntity(Abacus entity, AbacusRequest dto) {
-        entity.setName(dto.getName());
-        entity.setDescription(dto.getDescription());
-        entity.setLines(dto.getLines());
-        entity.setColumns(dto.getColumns());
+    protected void updateEntity(Abacus entity, AbacusRequest request) {
+        entity.setName(request.getName());
+        entity.setDescription(request.getDescription());
+        entity.setLines(request.getLines());
+        entity.setColumns(request.getColumns());
     }
 }

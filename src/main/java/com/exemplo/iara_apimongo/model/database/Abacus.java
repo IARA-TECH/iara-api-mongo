@@ -20,14 +20,23 @@ public class Abacus {
     private Integer factoryId;
     private String name;
     private String description;
-    private List<String> lines;
+    private List<AbacusLine> lines;
     private List<AbacusColumn> columns;
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AbacusColumn {
+        private String name;
         private String color;
         private Integer value;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AbacusLine {
+        private String name;
+        private LineType type;
     }
 }
