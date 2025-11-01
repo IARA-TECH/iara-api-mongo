@@ -53,7 +53,6 @@ public class AbacusPhotoController {
         return ResponseEntity.ok(ApiResponse.of("Abacus photo deleted successfully", HttpStatus.OK.value(), null));
     }
 
-
     @Operation(summary = "Validate sheet")
     @PutMapping("/validation/{id}")
     public ResponseEntity<ApiResponse<AbacusPhotoResponse>> validate(@PathVariable String id, @Valid @RequestBody ValidationRequest request) {
