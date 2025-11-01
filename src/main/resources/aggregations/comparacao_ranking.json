@@ -5,30 +5,25 @@
       "$expr": { "$eq": [ { "$year": "$taken_at" }, 2025 ] }
     }
   },
-
-  {"$unwind": "$values"},
-
+  { "$unwind": "$values" },
   {
     "$project": {
       "values": { "$sum": "$values" },
-      "month": {"$month": "$taken_at"},
+      "month": { "$month": "$taken_at" }
     }
   },
-
   {
     "$group": {
       "_id": "$month",
       "totalCount": { "$sum": "$values" }
     }
   },
-
   {
     "$project": {
       "month": "$_id",
-      "totalCount": True,
-      "_id": False
+      "totalCount": true,
+      "_id": false
     }
   },
-
-  {"$sort": {"totalCount": -1}}
+  { "$sort": { "totalCount": -1 } }
 ]
