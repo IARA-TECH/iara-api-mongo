@@ -52,7 +52,8 @@ public abstract class BaseService<E, ID, Req, Res> {
             updateEntity(entity, request);
         } catch (Exception e) {
             return null;
-        }        E saved = repository.save(entity);
+        }
+        E saved = repository.save(entity);
         return toResponse(saved);
     }
 

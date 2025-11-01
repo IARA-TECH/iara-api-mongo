@@ -72,6 +72,7 @@ public class AbacusPhotoController {
         return ResponseEntity.ok(ApiResponse.of("Sheet validated successfully", HttpStatus.OK.value(), validated));
     }
 
+    @Operation(summary = "Analyze an abacus image", description = "Sends an abacus image to the AI model for analysis. Optionally, you can provide colors and values parameters.")
     @PostMapping(value = "/analyze", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<Object>> analyzeAbacus(
             @RequestPart("file") MultipartFile file,
@@ -81,6 +82,7 @@ public class AbacusPhotoController {
         Object result = service.sendToModel(file, colors, values);
         return ResponseEntity.ok(ApiResponse.of("Abacus analyzed successfully", HttpStatus.OK.value(), result));
     }
+
 
     @PostMapping(value = "/confirm", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Confirm abacus data and upload photo + CSV")

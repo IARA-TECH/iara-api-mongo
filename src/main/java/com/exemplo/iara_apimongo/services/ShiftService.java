@@ -1,10 +1,11 @@
 package com.exemplo.iara_apimongo.services;
 
+import com.exemplo.iara_apimongo.exception.ResourceNotFoundException;
 import com.exemplo.iara_apimongo.model.database.Shift;
 import com.exemplo.iara_apimongo.model.dto.request.ShiftRequest;
 import com.exemplo.iara_apimongo.model.dto.response.ShiftResponse;
+import com.exemplo.iara_apimongo.repository.ShiftRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -13,8 +14,11 @@ import java.time.Instant;
 @Service
 public class ShiftService extends BaseService<Shift, String, ShiftRequest, ShiftResponse> {
 
-    public ShiftService(MongoRepository<Shift, String> repository) {
-        super(repository, "Shift");
+    private final ShiftRepository shiftRepository;
+
+    public ShiftService(ShiftRepository shiftRepository) {
+        super(shiftRepository, "Shift");
+        this.shiftRepository = shiftRepository;
     }
 
     @Override
@@ -43,5 +47,13 @@ public class ShiftService extends BaseService<Shift, String, ShiftRequest, Shift
         entity.setName(dto.getName());
         entity.setStartsAt(dto.getStartsAt());
         entity.setEndsAt(dto.getEndsAt());
+        log.info("Shift {} updated successfully", entity.getId());
+    }
+
+    public ShiftResponse findByName(String name){
+        log.info("Finding shift by name {}", name);
+        return shiftRepository.findByNameContainsIgnoreCase(name)
+                .map(this::toResponse)
+                .orElseThrow(() -> new ResourceNotFoundException("Shift not found with name: " + name));
     }
 }
