@@ -12,7 +12,7 @@ import com.exemplo.iara_apimongo.repository.AbacusPhotoRepository;
 import com.exemplo.iara_apimongo.repository.AbacusRepository;
 import com.exemplo.iara_apimongo.repository.ShiftRepository;
 import com.exemplo.iara_apimongo.repository.SheetRepository;
-import com.exemplo.iara_apimongo.util.scheduler.CsvUtils;
+import com.exemplo.iara_apimongo.util.CsvUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.*;
@@ -184,4 +184,10 @@ public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusP
                 .validatedBy(entity.getValidatedBy())
                 .build();
     }
+
+    @Override
+    public AbacusPhotoResponse update(String id, AbacusPhotoRequest dto) {
+        throw new UnsupportedOperationException("Update endpoint for AbacusPhoto is disabled. Use saveConfirmedData() instead.");
+    }
+
 }
