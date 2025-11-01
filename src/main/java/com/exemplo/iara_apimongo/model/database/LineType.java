@@ -5,25 +5,19 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document(collection = "shifts")
-public class Shift {
+@Document(collection = "line_types")
+public class LineType {
     @Id
     private String id;
 
     private String name;
 
-    @Field("starts_at")
-    private String startsAt;
-
-    @Field("ends_at")
-    private String endsAt;
-
     @Field("created_at")
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 }

@@ -13,20 +13,33 @@ import java.util.List;
 @Builder
 @Document(collection = "abacuses")
 public class Abacus {
+
     @Id
     private String id;
 
     @Field("factory_id")
     private Integer factoryId;
+
     private String name;
     private String description;
-    private List<String> lines;
+    private List<AbacusLine> lines;
     private List<AbacusColumn> columns;
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class AbacusLine {
+        private String name;
+
+        @Field("line_type")
+        private LineType lineType;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class AbacusColumn {
+        private String name;
         private String color;
         private Integer value;
     }

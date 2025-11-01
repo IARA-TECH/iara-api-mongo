@@ -25,24 +25,22 @@ public class ShiftController {
 
     @Operation(summary = "Create a new shift")
     @PostMapping
-    public ResponseEntity<ApiResponse<ShiftResponse>> create(@Valid @RequestBody ShiftRequest dto) {
-        ShiftResponse created = service.create(dto);
+    public ResponseEntity<ApiResponse<ShiftResponse>> create(@Valid @RequestBody ShiftRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.of("Shift created successfully", HttpStatus.CREATED.value(), created));
+                .body(ApiResponse.of("Shift created successfully", HttpStatus.CREATED.value(),
+                        service.create(request)));
     }
 
     @Operation(summary = "Find a shift by ID")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ShiftResponse>> findById(@PathVariable String id) {
-        ShiftResponse found = service.findById(id);
-        return ResponseEntity.ok(ApiResponse.of("Shift found", HttpStatus.OK.value(), found));
+        return ResponseEntity.ok(ApiResponse.of("Shift found", HttpStatus.OK.value(), service.findById(id)));
     }
 
     @Operation(summary = "List all shifts")
     @GetMapping
     public ResponseEntity<ApiResponse<List<ShiftResponse>>> findAll() {
-        List<ShiftResponse> all = service.findAll();
-        return ResponseEntity.ok(ApiResponse.of("All shifts retrieved", HttpStatus.OK.value(), all));
+        return ResponseEntity.ok(ApiResponse.of("All shifts retrieved", HttpStatus.OK.value(), service.findAll()));
     }
 
     @Operation(summary = "Update an existing shift")
@@ -59,4 +57,5 @@ public class ShiftController {
         service.delete(id);
         return ResponseEntity.ok(ApiResponse.of("Shift deleted successfully", HttpStatus.OK.value(), null));
     }
+
 }

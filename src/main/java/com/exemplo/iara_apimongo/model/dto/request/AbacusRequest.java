@@ -1,9 +1,9 @@
 package com.exemplo.iara_apimongo.model.dto.request;
 
 import com.exemplo.iara_apimongo.model.database.Abacus;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class AbacusRequest {
 
     @Schema(description = "Lines of the abacus")
     @NotEmpty(message = "Lines cannot be empty.")
-    private List<String> lines;
+    private List<Abacus.AbacusLine> lines;
 
     @Schema(description = "Columns of the abacus")
     @NotEmpty(message = "Columns cannot be empty.")

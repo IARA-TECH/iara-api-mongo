@@ -9,8 +9,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,15 +20,18 @@ import java.util.List;
 @RequestMapping("/iara/api/sheets")
 @CrossOrigin("*")
 @RequiredArgsConstructor
-@Tag(name = "Sheets", description = "Operations related to production sheets")
+@Tag(name = "Sheets", description = "Operations related to sheets")
 public class SheetController {
 
     private final SheetService service;
 
-    @Operation(summary = "Create a new production sheet")
-    @PostMapping
-    public ResponseEntity<ApiResponse<SheetResponse>> create(@Valid @RequestBody SheetRequest dto) {
-        SheetResponse created = service.create(dto);
+    @Operation(summary = "Create a new sheet (with Excel upload)")
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<SheetResponse>> create(
+            @RequestPart("data") @Valid SheetRequest dto,
+            @RequestPart("file") MultipartFile file
+    ) {
+        SheetResponse created = service.createWithFile(dto, file);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.of("Sheet created successfully", HttpStatus.CREATED.value(), created));
     }
@@ -35,22 +40,14 @@ public class SheetController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<SheetResponse>> findById(@PathVariable String id) {
         SheetResponse found = service.findById(id);
-        return ResponseEntity.ok(ApiResponse.of("Sheet found", HttpStatus.OK.value(), found));
+        return ResponseEntity.ok(ApiResponse.of("Sheet found successfully", HttpStatus.OK.value(), found));
     }
 
     @Operation(summary = "List all sheets")
     @GetMapping
     public ResponseEntity<ApiResponse<List<SheetResponse>>> findAll() {
         List<SheetResponse> all = service.findAll();
-        return ResponseEntity.ok(ApiResponse.of("All sheets retrieved", HttpStatus.OK.value(), all));
-    }
-
-    @Operation(summary = "Update an existing sheet")
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<SheetResponse>> update(@PathVariable String id,
-                                                             @Valid @RequestBody SheetRequest dto) {
-        SheetResponse updated = service.update(id, dto);
-        return ResponseEntity.ok(ApiResponse.of("Sheet updated successfully", HttpStatus.OK.value(), updated));
+        return ResponseEntity.ok(ApiResponse.of("Sheets retrieved successfully", HttpStatus.OK.value(), all));
     }
 
     @Operation(summary = "Delete a sheet by ID")

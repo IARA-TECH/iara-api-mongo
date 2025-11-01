@@ -14,16 +14,19 @@ import java.util.List;
 @Builder
 @Document(collection = "sheets")
 public class Sheet {
+
     @Id
     private String id;
 
     @Field("factory_id")
     private Integer factoryId;
 
-    @Field("shift_id")
-    private AbacusPhoto.ShiftSummary shift;
+    private Shift shift;
 
     private Instant date;
+
+    @Field("sheet_url_blob")
+    private String sheetUrlBlob;
 
     @Field("abacus_photos")
     private List<String> abacusPhotos;

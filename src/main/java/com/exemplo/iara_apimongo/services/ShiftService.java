@@ -3,39 +3,37 @@ package com.exemplo.iara_apimongo.services;
 import com.exemplo.iara_apimongo.model.database.Shift;
 import com.exemplo.iara_apimongo.model.dto.request.ShiftRequest;
 import com.exemplo.iara_apimongo.model.dto.response.ShiftResponse;
-import com.exemplo.iara_apimongo.repository.ShiftRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalTime;
+import java.time.Instant;
 
 @Slf4j
 @Service
 public class ShiftService extends BaseService<Shift, String, ShiftRequest, ShiftResponse> {
 
-    public ShiftService(ShiftRepository repository) {
+    public ShiftService(MongoRepository<Shift, String> repository) {
         super(repository, "Shift");
     }
 
     @Override
-    protected Shift toEntity(ShiftRequest dto) {
+    protected Shift toEntity(ShiftRequest request) {
         return Shift.builder()
-                .name(dto.getName())
-                .startsAt(dto.getStartsAt().toString())
-                .endsAt(dto.getEndsAt().toString())
+                .name(request.getName())
+                .startsAt(request.getStartsAt())
+                .endsAt(request.getEndsAt())
+                .createdAt(Instant.now())
                 .build();
     }
 
     @Override
     protected ShiftResponse toResponse(Shift entity) {
-        LocalTime start = LocalTime.parse(entity.getStartsAt());
-        LocalTime end = LocalTime.parse(entity.getEndsAt());
-
         return ShiftResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())
-                .startsAt(start)
-                .endsAt(end)
+                .startsAt(entity.getStartsAt())
+                .endsAt(entity.getEndsAt())
                 .createdAt(entity.getCreatedAt())
                 .build();
     }
@@ -43,7 +41,7 @@ public class ShiftService extends BaseService<Shift, String, ShiftRequest, Shift
     @Override
     protected void updateEntity(Shift entity, ShiftRequest dto) {
         entity.setName(dto.getName());
-        entity.setStartsAt(dto.getStartsAt().toString());
-        entity.setEndsAt(dto.getEndsAt().toString());
+        entity.setStartsAt(dto.getStartsAt());
+        entity.setEndsAt(dto.getEndsAt());
     }
 }
