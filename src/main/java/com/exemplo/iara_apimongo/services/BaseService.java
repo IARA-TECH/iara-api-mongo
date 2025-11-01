@@ -8,11 +8,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Slf4j
-@RequiredArgsConstructor
 public abstract class BaseService<E, ID, Req, Res> {
 
     protected final MongoRepository<E, ID> repository;
     private final String entityName;
+
+    public BaseService(MongoRepository<E, ID> repository, String entityName) {
+        this.repository = repository;
+        this.entityName = entityName;
+    }
 
     protected abstract E toEntity(Req request);
     protected abstract Res toResponse(E entity);

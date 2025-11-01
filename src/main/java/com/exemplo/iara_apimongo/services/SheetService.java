@@ -5,10 +5,11 @@ import com.exemplo.iara_apimongo.model.database.Sheet;
 import com.exemplo.iara_apimongo.model.database.Shift;
 import com.exemplo.iara_apimongo.model.dto.request.SheetRequest;
 import com.exemplo.iara_apimongo.model.dto.response.SheetResponse;
-import com.exemplo.iara_apimongo.repository.SheetRepository;
 import com.exemplo.iara_apimongo.repository.ShiftRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
@@ -20,12 +21,14 @@ import java.util.List;
 public class SheetService extends BaseService<Sheet, String, SheetRequest, SheetResponse> {
 
     private final ShiftRepository shiftRepository;
+    private final SupabaseStorageService supabaseStorageService;
 
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
-    public SheetService(SheetRepository repository, ShiftRepository shiftRepository) {
+    public SheetService(MongoRepository<Sheet, String> repository, ShiftRepository shiftRepository, SupabaseStorageService supabaseStorageService) {
         super(repository, "Sheet");
         this.shiftRepository = shiftRepository;
+        this.supabaseStorageService = supabaseStorageService;
     }
 
     @Override
@@ -56,12 +59,8 @@ public class SheetService extends BaseService<Sheet, String, SheetRequest, Sheet
         String endsAt = null;
         Shift shift = entity.getShift();
         if (shift != null) {
-            if (shift.getStartsAt() != null) {
-                startsAt = shift.getStartsAt();
-            }
-            if (shift.getEndsAt() != null) {
-                endsAt = shift.getEndsAt();
-            }
+            startsAt = shift.getStartsAt();
+            endsAt = shift.getEndsAt();
         }
 
         return SheetResponse.builder()
@@ -75,6 +74,20 @@ public class SheetService extends BaseService<Sheet, String, SheetRequest, Sheet
                 .shiftStartsAt(startsAt)
                 .shiftEndsAt(endsAt)
                 .build();
+    }
+
+    public SheetResponse createWithFile(SheetRequest request, MultipartFile file) {
+        try {
+            String url = supabaseStorageService.uploadFile("sheets", file);
+            request.setSheetUrlBlob(url);
+
+            Sheet entity = toEntity(request);
+            repository.save(entity);
+
+            return toResponse(entity);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create sheet with file: " + e.getMessage(), e);
+        }
     }
 
     private Shift getShift(String shiftId) {

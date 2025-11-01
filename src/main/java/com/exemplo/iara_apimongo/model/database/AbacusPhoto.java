@@ -23,6 +23,9 @@ public class AbacusPhoto {
     private Shift shift;
     private Abacus abacus;
 
+    @Field("taken_by")
+    private String takenBy;
+
     @Field("taken_at")
     private Instant takenAt;
 

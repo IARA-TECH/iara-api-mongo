@@ -9,8 +9,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,10 +25,13 @@ public class SheetController {
 
     private final SheetService service;
 
-    @Operation(summary = "Create a new sheet")
-    @PostMapping
-    public ResponseEntity<ApiResponse<SheetResponse>> create(@Valid @RequestBody SheetRequest dto) {
-        SheetResponse created = service.create(dto);
+    @Operation(summary = "Create a new sheet (with Excel upload)")
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<SheetResponse>> create(
+            @RequestPart("data") @Valid SheetRequest dto,
+            @RequestPart("file") MultipartFile file
+    ) {
+        SheetResponse created = service.createWithFile(dto, file);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.of("Sheet created successfully", HttpStatus.CREATED.value(), created));
     }

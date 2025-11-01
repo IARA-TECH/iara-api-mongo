@@ -16,9 +16,9 @@ public class ShiftService extends BaseService<Shift, String, ShiftRequest, Shift
 
     private final ShiftRepository shiftRepository;
 
-    public ShiftService(ShiftRepository repository) {
-        super(repository, "Shift");
-        shiftRepository = repository;
+    public ShiftService(ShiftRepository shiftRepository) {
+        super(shiftRepository, "Shift");
+        this.shiftRepository = shiftRepository;
     }
 
     @Override
@@ -42,9 +42,18 @@ public class ShiftService extends BaseService<Shift, String, ShiftRequest, Shift
                 .build();
     }
 
+    @Override
+    protected void updateEntity(Shift entity, ShiftRequest dto) {
+        entity.setName(dto.getName());
+        entity.setStartsAt(dto.getStartsAt());
+        entity.setEndsAt(dto.getEndsAt());
+        log.info("Shift {} updated successfully", entity.getId());
+    }
+
     public ShiftResponse findByName(String name){
         log.info("Finding shift by name {}", name);
-        return toResponse(shiftRepository.findByNameContainsIgnoreCase(name)
-                .orElseThrow(() -> new ResourceNotFoundException("Shift not found with name: "+ name)));
+        return shiftRepository.findByNameContainsIgnoreCase(name)
+                .map(this::toResponse)
+                .orElseThrow(() -> new ResourceNotFoundException("Shift not found with name: " + name));
     }
 }

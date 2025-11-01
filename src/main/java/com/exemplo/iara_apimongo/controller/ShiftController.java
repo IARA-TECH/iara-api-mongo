@@ -53,6 +53,13 @@ public class ShiftController {
         return ResponseEntity.ok(ApiResponse.of("Shift found", HttpStatus.OK.value(), found));
     }
 
+    @Operation(summary = "Update an existing shift")
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<ShiftResponse>> update(@PathVariable String id,
+                                                             @Valid @RequestBody ShiftRequest dto) {
+        ShiftResponse updated = service.update(id, dto);
+        return ResponseEntity.ok(ApiResponse.of("Shift updated successfully", HttpStatus.OK.value(), updated));
+    }
 
     @Operation(summary = "Delete a shift by ID")
     @DeleteMapping("/{id}")
