@@ -6,6 +6,11 @@ spring:
     mongodb:
       uri: ${MONGO_URI}
 
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
 springdoc:
   swagger-ui:
     path: /api-docs
@@ -17,3 +22,4 @@ supabase:
 
 model:
   url: ${MODEL_URL}
+
