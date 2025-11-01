@@ -1,0 +1,27 @@
+[
+  { "$match": { "abacus.factory_id": 1 } },
+  { "$project": { "lines": "$abacus.lines", "values": 1, "taken_at": 1 } },
+  {
+    "$project": {
+      "lines": {
+        "$map": {
+          "input": { "$range": [0, { "$size": "$lines" }] },
+          "as": "i",
+          "in": {
+            "line": { "$arrayElemAt": ["$lines", "$$i"] },
+            "row_value": { "$sum": { "$arrayElemAt": ["$values", "$$i"] } }
+          }
+        }
+      },
+      "taken_at": true
+    }
+  },
+  { "$unwind": "$lines" },
+  {
+    "$group": {
+      "_id": "$lines.line.line_type.name",
+      "totalCount": { "$sum": "$lines.row_value" }
+    }
+  },
+  { "$project": { "name": "$_id", "totalCount": true, "_id": false } }
+]

@@ -184,10 +184,4 @@ public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusP
                 .validatedBy(entity.getValidatedBy())
                 .build();
     }
-
-    @Override
-    public AbacusPhotoResponse update(String id, AbacusPhotoRequest dto) {
-        throw new UnsupportedOperationException("Update endpoint for AbacusPhoto is disabled. Use saveConfirmedData() instead.");
-    }
-
 }
