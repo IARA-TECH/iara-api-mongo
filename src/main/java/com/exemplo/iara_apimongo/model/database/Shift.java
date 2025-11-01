@@ -1,12 +1,11 @@
-package com.exemplo.iara_apimongo.model;
+package com.exemplo.iara_apimongo.model.database;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.Instant;
-import java.time.LocalTime;
 
 @Data
 @NoArgsConstructor
@@ -17,14 +16,14 @@ public class Shift {
     @Id
     private String id;
 
-    @NotBlank
     private String name;
 
-    @NotBlank
-    private LocalTime startsAt;
+    @Field("starts_at")
+    private String startsAt;
 
-    @NotBlank
-    private LocalTime endsAt;
+    @Field("ends_at")
+    private String endsAt;
 
+    @Field("created_at")
     private Instant createdAt;
 }

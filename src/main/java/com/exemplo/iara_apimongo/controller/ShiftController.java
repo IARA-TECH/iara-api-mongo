@@ -1,7 +1,8 @@
 package com.exemplo.iara_apimongo.controller;
 
-import com.exemplo.iara_apimongo.dto.shiftDTOs.ShiftRequestDTO;
-import com.exemplo.iara_apimongo.dto.shiftDTOs.ShiftResponseDTO;
+import com.exemplo.iara_apimongo.model.dto.request.NameRequest;
+import com.exemplo.iara_apimongo.model.dto.request.ShiftRequest;
+import com.exemplo.iara_apimongo.model.dto.response.ShiftResponse;
 import com.exemplo.iara_apimongo.exception.ApiResponse;
 import com.exemplo.iara_apimongo.services.ShiftService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,45 +19,53 @@ import java.util.List;
 @RequestMapping("/iara/api/shifts")
 @CrossOrigin("*")
 @RequiredArgsConstructor
-@Tag(name = "Shifts", description = "Operações relacionadas a turnos")
+@Tag(name = "Shifts", description = "Operations related to shifts")
 public class ShiftController {
 
     private final ShiftService service;
 
-    @Operation(summary = "Cria um novo turno")
+    @Operation(summary = "Create a new shift")
     @PostMapping
-    public ResponseEntity<ApiResponse<ShiftResponseDTO>> create(@Valid @RequestBody ShiftRequestDTO dto) {
-        ShiftResponseDTO created = service.create(dto);
+    public ResponseEntity<ApiResponse<ShiftResponse>> create(@Valid @RequestBody ShiftRequest request) {
+        ShiftResponse created = service.create(request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.of("Shift created successfully", HttpStatus.CREATED.value(), created));
     }
 
-    @Operation(summary = "Busca um turno por ID")
+    @Operation(summary = "Find a shift by ID")
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<ShiftResponseDTO>> findById(@PathVariable String id) {
-        ShiftResponseDTO found = service.findById(id);
+    public ResponseEntity<ApiResponse<ShiftResponse>> findById(@PathVariable String id) {
+        ShiftResponse found = service.findById(id);
         return ResponseEntity.ok(ApiResponse.of("Shift found", HttpStatus.OK.value(), found));
     }
 
-    @Operation(summary = "Lista todos os turnos")
+    @Operation(summary = "List all shifts")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ShiftResponseDTO>>> findAll() {
-        List<ShiftResponseDTO> all = service.findAll();
-        return ResponseEntity.ok(ApiResponse.of("All shifts retrieved", HttpStatus.OK.value(), all));
+    public ResponseEntity<ApiResponse<List<ShiftResponse>>> findAll() {
+        List<ShiftResponse> found = service.findAll();
+        return ResponseEntity.ok(ApiResponse.of("All shifts retrieved", HttpStatus.OK.value(), found));
     }
 
-    @Operation(summary = "Atualiza um turno existente")
+    @Operation(summary = "Find a shift by name")
+    @PostMapping("/by-name")
+    public ResponseEntity<ApiResponse<ShiftResponse>> findByName(@RequestBody NameRequest request) {
+        ShiftResponse found = service.findByName(request.getName());
+        return ResponseEntity.ok(ApiResponse.of("Shift found", HttpStatus.OK.value(), found));
+    }
+
+    @Operation(summary = "Update an existing shift")
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<ShiftResponseDTO>> update(@PathVariable String id,
-                                                                @Valid @RequestBody ShiftRequestDTO dto) {
-        ShiftResponseDTO updated = service.update(id, dto);
+    public ResponseEntity<ApiResponse<ShiftResponse>> update(@PathVariable String id,
+                                                             @Valid @RequestBody ShiftRequest dto) {
+        ShiftResponse updated = service.update(id, dto);
         return ResponseEntity.ok(ApiResponse.of("Shift updated successfully", HttpStatus.OK.value(), updated));
     }
 
-    @Operation(summary = "Remove um turno por ID")
+    @Operation(summary = "Delete a shift by ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
         service.delete(id);
         return ResponseEntity.ok(ApiResponse.of("Shift deleted successfully", HttpStatus.OK.value(), null));
     }
+
 }

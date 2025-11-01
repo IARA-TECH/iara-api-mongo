@@ -1,4 +1,4 @@
-package com.exemplo.iara_apimongo.dto.sheetDTOs;
+package com.exemplo.iara_apimongo.model.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,12 +12,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SheetResponseDTO {
+public class SheetResponse {
+
     private String id;
     private int factoryId;
-    private String shiftId;
     private List<String> abacusPhotoIds;
     private Instant date;
+    private String sheetUrlBlob;
+
+    private String shiftId;
     private String shiftName;
     private String shiftStartsAt;
     private String shiftEndsAt;

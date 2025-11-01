@@ -6,52 +6,67 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Slf4j
-@RequiredArgsConstructor
 public abstract class BaseService<E, ID, Req, Res> {
 
     protected final MongoRepository<E, ID> repository;
     private final String entityName;
 
-    protected abstract E toEntity(Req request);
-    protected abstract Res toResponse(E entity);
-    protected abstract void updateEntity(E entity, Req request);
-
-    public List<Res> findAll() {
-        log.info("[{}Service] findAll", entityName);
-        return repository.findAll().stream()
-                .map(this::toResponse)
-                .toList();
+    public BaseService(MongoRepository<E, ID> repository, String entityName) {
+        this.repository = repository;
+        this.entityName = entityName;
     }
 
+    protected abstract E toEntity(Req request);
+    protected abstract Res toResponse(E entity);
+
+    @Transactional(readOnly = true)
+    public List<Res> findAll() {
+        log.info("Finding all {}", entityName);
+        return repository.findAll().stream().map(this::toResponse).toList();
+    }
+
+    @Transactional(readOnly = true)
     public Res findById(ID id) {
-        log.info("[{}Service] findById id={}", entityName, id);
+        log.info("Finding {} by id {}", entityName, id);
         E entity = repository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException(entityName + " with ID " + id + " not found."));
+                .orElseThrow(() -> new RuntimeException(entityName + " not found with id: " + id));
         return toResponse(entity);
     }
 
     @Transactional
     public Res create(Req request) {
-        log.info("[{}Service] create", entityName);
+        log.info("Creating new {}", entityName);
         E entity = toEntity(request);
-        return toResponse(repository.save(entity));
+        E saved = repository.save(entity);
+        return toResponse(saved);
     }
 
     @Transactional
     public Res update(ID id, Req request) {
-        log.info("[{}Service] update id={}", entityName, id);
+        log.info("Updating {} with id {}", entityName, id);
         E entity = repository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException(entityName + " with ID " + id + " not found."));
-        updateEntity(entity, request);
-        return toResponse(repository.save(entity));
+                .orElseThrow(() -> new RuntimeException(entityName + " not found with id: " + id));
+        try {
+            updateEntity(entity, request);
+        } catch (Exception e) {
+            return null;
+        }
+        E saved = repository.save(entity);
+        return toResponse(saved);
     }
 
     @Transactional
     public void delete(ID id) {
-        log.info("[{}Service] delete id={}", entityName, id);
+        log.info("Deleting {} with id {}", entityName, id);
+        if (!repository.existsById(id)) {
+            throw new RuntimeException(entityName + " not found with id: " + id);
+        }
         repository.deleteById(id);
+    }
+
+    protected void updateEntity(E entity, Req request) {
+        throw new UnsupportedOperationException(entityName + " update is not supported by default.");
     }
 }

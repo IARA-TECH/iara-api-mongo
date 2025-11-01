@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: iara-api-mongo
+
+  data:
+    mongodb:
+      uri: ${MONGO_URI}
+
+springdoc:
+  swagger-ui:
+    path: /api-docs
+
+supabase:
+  url: ${SUPABASE_URL}
+  key: ${SUPABASE_KEY}
+  storage-bucket: ${SUPABASE_BUCKET}
+
+model:
+  url: ${MODEL_URL}

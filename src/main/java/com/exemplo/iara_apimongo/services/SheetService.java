@@ -1,51 +1,115 @@
 package com.exemplo.iara_apimongo.services;
 
-import com.exemplo.iara_apimongo.dto.sheetDTOs.SheetRequestDTO;
-import com.exemplo.iara_apimongo.dto.sheetDTOs.SheetResponseDTO;
-import com.exemplo.iara_apimongo.model.Sheet;
-import com.exemplo.iara_apimongo.model.AbacusPhoto.ShiftSummary;
+import com.exemplo.iara_apimongo.exception.ResourceNotFoundException;
+import com.exemplo.iara_apimongo.model.database.Sheet;
+import com.exemplo.iara_apimongo.model.database.Shift;
+import com.exemplo.iara_apimongo.model.dto.request.SheetRequest;
+import com.exemplo.iara_apimongo.model.dto.response.SheetResponse;
 import com.exemplo.iara_apimongo.repository.SheetRepository;
+import com.exemplo.iara_apimongo.repository.ShiftRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
-public class SheetService extends BaseService<Sheet, String, SheetRequestDTO, SheetResponseDTO> {
+public class SheetService extends BaseService<Sheet, String, SheetRequest, SheetResponse> {
 
-    public SheetService(SheetRepository repository) {
+    private final ShiftRepository shiftRepository;
+    private final SupabaseStorageService supabaseStorageService;
+
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
+
+    public SheetService(MongoRepository<Sheet, String> repository, ShiftRepository shiftRepository, SupabaseStorageService supabaseStorageService) {
         super(repository, "Sheet");
+        this.shiftRepository = shiftRepository;
+        this.supabaseStorageService = supabaseStorageService;
     }
 
     @Override
-    protected Sheet toEntity(SheetRequestDTO dto) {
-        ShiftSummary shift = new ShiftSummary(dto.getShiftId(), dto.getShiftName(), dto.getShiftStartsAt(), dto.getShiftEndsAt());
+    protected Sheet toEntity(SheetRequest request) {
+        Instant date = Instant.now();
+
+        List<String> abacusPhotos = request.getAbacusPhotoIds() != null
+                ? new ArrayList<>(request.getAbacusPhotoIds())
+                : new ArrayList<>();
+
+        Shift shift = null;
+        if (request.getShiftId() != null && !request.getShiftId().isBlank()) {
+            shift = getShift(request.getShiftId());
+        }
+
         return Sheet.builder()
-                .factoryId(dto.getFactoryId())
+                .factoryId(request.getFactoryId())
                 .shift(shift)
-                .date(dto.getDate())
-                .abacusPhotos(dto.getAbacusPhotoIds())
+                .date(date)
+                .abacusPhotos(abacusPhotos)
+                .sheetUrlBlob(request.getSheetUrlBlob())
                 .build();
     }
 
     @Override
-    protected SheetResponseDTO toResponse(Sheet entity) {
-        return SheetResponseDTO.builder()
+    protected SheetResponse toResponse(Sheet entity) {
+        String startsAt = null;
+        String endsAt = null;
+        Shift shift = entity.getShift();
+        if (shift != null) {
+            startsAt = shift.getStartsAt();
+            endsAt = shift.getEndsAt();
+        }
+
+        return SheetResponse.builder()
                 .id(entity.getId())
                 .factoryId(entity.getFactoryId())
-                .shiftId(entity.getShift().getId())
-                .shiftName(entity.getShift().getName())
-                .shiftStartsAt(entity.getShift().getStartsAt())
-                .shiftEndsAt(entity.getShift().getEndsAt())
-                .abacusPhotoIds(entity.getAbacusPhotos())
+                .abacusPhotoIds(entity.getAbacusPhotos() != null ? new ArrayList<>(entity.getAbacusPhotos()) : List.of())
                 .date(entity.getDate())
+                .sheetUrlBlob(entity.getSheetUrlBlob())
+                .shiftId(shift != null ? shift.getId() : null)
+                .shiftName(shift != null ? shift.getName() : null)
+                .shiftStartsAt(startsAt)
+                .shiftEndsAt(endsAt)
                 .build();
     }
 
-    @Override
-    protected void updateEntity(Sheet entity, SheetRequestDTO dto) {
-        entity.setFactoryId(dto.getFactoryId());
-        entity.setAbacusPhotos(dto.getAbacusPhotoIds());
-        entity.setDate(dto.getDate());
-        entity.setShift(new ShiftSummary(dto.getShiftId(), dto.getShiftName(), dto.getShiftStartsAt(), dto.getShiftEndsAt()));
+    public SheetResponse createWithFile(SheetRequest request, MultipartFile file) {
+        try {
+            String url = supabaseStorageService.uploadFile("sheets", file);
+            request.setSheetUrlBlob(url);
+
+            Sheet entity = toEntity(request);
+            repository.save(entity);
+
+            return toResponse(entity);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create sheet with file: " + e.getMessage(), e);
+        }
     }
+
+    private Shift getShift(String shiftId) {
+        return shiftRepository.findById(shiftId)
+                .orElseThrow(() -> new ResourceNotFoundException("Shift not found with id: " + shiftId));
+    }
+
+    public List<SheetResponse> findByFactoryId(int factoryId) {
+        log.info("Fetching sheets for factoryId {}", factoryId);
+
+        List<Sheet> sheets = ((SheetRepository) repository).findByFactoryId(factoryId);
+
+        if (sheets.isEmpty()) {
+            throw new ResourceNotFoundException("No sheets found for factoryId: " + factoryId);
+        }
+
+        List<SheetResponse> responses = new ArrayList<>();
+        for (Sheet sheet : sheets) {
+            responses.add(toResponse(sheet));
+        }
+        return responses;
+    }
+
 }

@@ -1,6 +1,6 @@
-package com.exemplo.iara_apimongo.dto.abacusDTOs;
+package com.exemplo.iara_apimongo.model.dto.response;
 
-import com.exemplo.iara_apimongo.model.Abacus;
+import com.exemplo.iara_apimongo.model.database.Abacus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,11 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AbacusResponseDTO {
+public class AbacusResponse {
     private String id;
     private int factoryId;
     private String name;
     private String description;
-    private List<String> lines;
+    private List<Abacus.AbacusLine> lines;
     private List<Abacus.AbacusColumn> columns;
 }

@@ -1,7 +1,7 @@
 package com.exemplo.iara_apimongo.services;
 
-import com.exemplo.iara_apimongo.dto.dashboardsDTOs.*;
-import com.exemplo.iara_apimongo.model.Shift;
+import com.exemplo.iara_apimongo.model.database.Shift;
+import com.exemplo.iara_apimongo.model.dto.response.dashboard.*;
 import com.exemplo.iara_apimongo.repository.ShiftRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -28,102 +28,95 @@ public class DashboardService {
                 .collect(Collectors.toMap(Shift::getId, Shift::getName, (a, b) -> a));
     }
 
-    public DashboardComparativoDTO getComparativo() {
-        List<String> periodos = Arrays.asList("Jan", "Feb", "Mar");
-        List<Integer> falhasTecnicas = Arrays.asList(5, 3, 7);
-        List<Integer> condenasGranja = Arrays.asList(10, 8, 12);
+    public ComparativeDashboard getComparative() {
+        List<String> periods = Arrays.asList("Jan", "Feb", "Mar");
+        List<Integer> technicalFailures = Arrays.asList(5, 3, 7);
+        List<Integer> farmCondemnations = Arrays.asList(10, 8, 12);
 
-        DashboardComparativoDTO.TotaisDTO totais = new DashboardComparativoDTO.TotaisDTO(
-                condenasGranja.stream().mapToInt(Integer::intValue).sum(),
-                falhasTecnicas.stream().mapToInt(Integer::intValue).sum()
+        ComparativeDashboard.DashboardTotals totals = new ComparativeDashboard.DashboardTotals(
+                farmCondemnations.stream().mapToInt(Integer::intValue).sum(),
+                technicalFailures.stream().mapToInt(Integer::intValue).sum()
         );
 
-        List<DashboardComparativoDTO.RankingMesDTO> rankingMeses = IntStream.range(0, periodos.size())
-                .mapToObj(i -> new DashboardComparativoDTO.RankingMesDTO(periodos.get(i), falhasTecnicas.get(i) + condenasGranja.get(i)))
+        List<ComparativeDashboard.MonthlyRanking> monthlyRanking = IntStream.range(0, periods.size())
+                .mapToObj(i -> new ComparativeDashboard.MonthlyRanking(
+                        periods.get(i),
+                        technicalFailures.get(i) + farmCondemnations.get(i)
+                ))
                 .collect(Collectors.toList());
 
-        return DashboardComparativoDTO.builder()
-                .titulo("Comparativo Mensal")
-                .periodos(periodos)
-                .falhasTecnicas(falhasTecnicas)
-                .condenasGranja(condenasGranja)
-                .totais(totais)
-                .rankingMeses(rankingMeses)
+        return ComparativeDashboard.builder()
+                .title("Monthly Comparison")
+                .periods(periods)
+                .technicalFailures(technicalFailures)
+                .farmCondemnations(farmCondemnations)
+                .totals(totals)
+                .monthlyRanking(monthlyRanking)
                 .build();
     }
 
-    public DashboardTurnosDTO getTurnos() {
-        List<DashboardTurnosDTO.QuantidadePorTurnoDTO> quantidadePorTurno = getQuantidadeTotalPorTurno();
-        DashboardTurnosDTO.EvolucaoMensalTurnosDTO evolucaoMensal = getEvolucaoMensalPorTurno();
+    public ShiftDashboard getShifts() {
+        List<ShiftDashboard.QuantityPerShiftDTO> quantityPerShift = getTotalQuantityPerShift();
+        ShiftDashboard.MonthlyEvolutionDTO monthlyEvolution = getMonthlyEvolutionPerShift();
 
-        return DashboardTurnosDTO.builder()
-                .titulo("Dashboard de Turnos")
-                .quantidadePorTurno(quantidadePorTurno)
-                .evolucaoMensal(evolucaoMensal)
+        return ShiftDashboard.builder()
+                .title("Shift Dashboard")
+                .quantityPerShift(quantityPerShift)
+                .monthlyEvolution(monthlyEvolution)
                 .build();
     }
 
-    public DashboardFalhasDTO getFalhas() {
-        GenericDashboardDetailDTO generic = getDashboardDetalhado();
-        return generic.toDashboardFalhasDTO();
+    public FailuresDashboard getFailures() {
+        GenericDashboardDetail generic = getDetailedDashboard();
+        return generic.toFailuresDashboard();
     }
 
-    public DashboardGranjaDTO getGranja() {
-        GenericDashboardDetailDTO generic = getDashboardDetalhado();
-        return generic.toDashboardGranjaDTO();
+    public FarmDashboard getFarm() {
+        GenericDashboardDetail generic = getDetailedDashboard();
+        return generic.toFarmDashboard();
     }
 
-    private List<DashboardTurnosDTO.QuantidadePorTurnoDTO> getQuantidadeTotalPorTurno() {
+    private List<ShiftDashboard.QuantityPerShiftDTO> getTotalQuantityPerShift() {
         return Arrays.asList(
-                new DashboardTurnosDTO.QuantidadePorTurnoDTO("Matutino", 15),
-                new DashboardTurnosDTO.QuantidadePorTurnoDTO("Vespertino", 20),
-                new DashboardTurnosDTO.QuantidadePorTurnoDTO("Noturno", 10)
+                new ShiftDashboard.QuantityPerShiftDTO("Morning", 15),
+                new ShiftDashboard.QuantityPerShiftDTO("Afternoon", 20),
+                new ShiftDashboard.QuantityPerShiftDTO("Night", 10)
         );
     }
 
-    private DashboardTurnosDTO.EvolucaoMensalTurnosDTO getEvolucaoMensalPorTurno() {
-        List<String> periodos = Arrays.asList("Jan", "Feb", "Mar");
-        List<Integer> matutino = Arrays.asList(5, 6, 4);
-        List<Integer> vespertino = Arrays.asList(7, 5, 8);
-        List<Integer> noturno = Arrays.asList(3, 4, 2);
+    private ShiftDashboard.MonthlyEvolutionDTO getMonthlyEvolutionPerShift() {
+        List<String> periods = Arrays.asList("Jan", "Feb", "Mar");
+        List<Integer> morning = Arrays.asList(5, 6, 4);
+        List<Integer> afternoon = Arrays.asList(7, 5, 8);
+        List<Integer> night = Arrays.asList(3, 4, 2);
 
-        return new DashboardTurnosDTO.EvolucaoMensalTurnosDTO(periodos, matutino, vespertino, noturno);
+        return new ShiftDashboard.MonthlyEvolutionDTO(periods, morning, afternoon, night);
     }
 
-    private GenericDashboardDetailDTO getDashboardDetalhado() {
-        // Ranking para falhas
-        List<DashboardFalhasDTO.RankingMotivoDTO> rankingFalhas = Arrays.asList(
-                new DashboardFalhasDTO.RankingMotivoDTO("Motivo A", 5),
-                new DashboardFalhasDTO.RankingMotivoDTO("Motivo B", 3)
+    private GenericDashboardDetail getDetailedDashboard() {
+        List<FailuresDashboard.ReasonRanking> failureRanking = Arrays.asList(
+                new FailuresDashboard.ReasonRanking("Reason A", 5),
+                new FailuresDashboard.ReasonRanking("Reason B", 3)
         );
 
-        // Ranking para granja
-        List<DashboardGranjaDTO.RankingMotivoDTO> rankingGranjas = Arrays.asList(
-                new DashboardGranjaDTO.RankingMotivoDTO("Motivo A", 7),
-                new DashboardGranjaDTO.RankingMotivoDTO("Motivo B", 4)
+        List<FarmDashboard.ReasonRanking> farmRanking = Arrays.asList(
+                new FarmDashboard.ReasonRanking("Reason A", 7),
+                new FarmDashboard.ReasonRanking("Reason B", 4)
         );
 
-        // Por fábrica (somente granja)
-        List<DashboardGranjaDTO.PorFabricaDTO> porFabrica = Arrays.asList(
-                new DashboardGranjaDTO.PorFabricaDTO("Fábrica X", 7),
-                new DashboardGranjaDTO.PorFabricaDTO("Fábrica Y", 8)
-        );
-
-        // Evolução mensal
-        DashboardFalhasDTO.EvolucaoMensalDTO evolucaoMensal = new DashboardFalhasDTO.EvolucaoMensalDTO(
+        FailuresDashboard.MonthlyEvolution monthlyEvolution = new FailuresDashboard.MonthlyEvolution(
                 Arrays.asList("Jan", "Feb", "Mar"),
                 Arrays.asList(5, 3, 7)
         );
 
-        return GenericDashboardDetailDTO.builder()
-                .titulo("Dashboard Detalhado")
+        return GenericDashboardDetail.builder()
+                .title("Detailed Dashboard")
                 .total(15)
-                .taxaMedia(0.25)
-                .comparativoAnterior(10)
-                .rankingMotivosFalhas(rankingFalhas)
-                .rankingMotivosGranjas(rankingGranjas)
-                .porFabrica(porFabrica)
-                .evolucaoMensal(evolucaoMensal)
+                .averageRate(0.25)
+                .previousComparison(10)
+                .failureReasonRanking(failureRanking)
+                .farmReasonRanking(farmRanking)
+                .monthlyEvolution(monthlyEvolution)
                 .build();
     }
 }
