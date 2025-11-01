@@ -1,0 +1,54 @@
+[
+  {
+    "$match": {"abacus.factory_id": 1}
+  },
+
+  {
+    "$project": {
+      "lines": "$abacus.lines",
+      "values": 1,
+      "taken_at": 1,
+    }
+  },
+
+  {
+    "$project": {
+      "lines": {
+        "$map": {
+          "input": {"$range": [0, {"$size": "$lines"}]},
+          "as": "i",
+          "in": {
+            "line": {"$arrayElemAt": ["$lines", "$$i"]},
+            "row_value": {"$sum": {"$arrayElemAt": ["$values", "$$i"]}}
+          }
+        }
+      },
+      "taken_at": True
+    }
+  },
+
+  {"$unwind": "$lines"},
+
+  {
+    "$match": {
+      "lines.line.line_type.name": {"$eq": "Condena de falhas técnicas"}
+    }
+  },
+
+  {
+    "$group": {
+      "_id": "$taken_at",
+      "totalCount": { "$sum": "$lines.row_value" }
+    }
+  },
+
+  { "$sort": { "_id": 1 } },
+
+  {
+    "$project": {
+      "taken_at": "$_id",
+      "totalCount": True,
+      "_id": False
+    }
+  }
+]

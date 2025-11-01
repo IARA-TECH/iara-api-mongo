@@ -136,7 +136,7 @@ public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusP
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
             ResponseEntity<Map> response = restTemplate.exchange(
-                    modelUrl + "/analyze",
+                    modelUrl,
                     HttpMethod.POST,
                     requestEntity,
                     Map.class
@@ -184,10 +184,4 @@ public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusP
                 .validatedBy(entity.getValidatedBy())
                 .build();
     }
-
-    @Override
-    public AbacusPhotoResponse update(String id, AbacusPhotoRequest dto) {
-        throw new UnsupportedOperationException("Update endpoint for AbacusPhoto is disabled. Use saveConfirmedData() instead.");
-    }
-
 }

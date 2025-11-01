@@ -1,0 +1,44 @@
+[
+  {
+    "$match": {"abacus.factory_id": 2}
+  },
+
+  {
+    "$project": {
+      "values": 1,
+      "shift": 1,
+      "taken_at": 1,
+    }
+  },
+
+  {"$unwind": "$values"},
+
+  {
+    "$project": {
+      "values": {"$sum": "$values"},
+      "shift": "$shift.name",
+      "taken_at": 1,
+    }
+  },
+
+  {
+    "$group": {
+      "_id": {
+        "shift": "$shift",
+        "taken_at": "$taken_at"
+      },
+      "totalCount": { "$sum": "$values" }
+    }
+  },
+
+  {
+    "$project": {
+      "name": "$_id.shift",
+      "taken_at": "$_id.taken_at",
+      "totalCount": True,
+      "_id": False
+    }
+  },
+
+  { "$sort": { "name": 1 } },
+]
