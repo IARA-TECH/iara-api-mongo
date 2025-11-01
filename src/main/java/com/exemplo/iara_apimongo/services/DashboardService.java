@@ -30,7 +30,6 @@ public class DashboardService {
         };
     }
 
-    // --------------------- COMPARATIVE DASHBOARD ---------------------
     public ComparativeDashboard getComparative(int factoryId) {
         Aggregation agg = newAggregation(
                 match(Criteria.where("abacus.factory_id").is(factoryId)),
@@ -94,7 +93,6 @@ public class DashboardService {
                 .build();
     }
 
-    // --------------------- FAILURES DASHBOARD ---------------------
     public FailuresDashboard getFailures(int factoryId) {
         Aggregation agg = newAggregation(
                 match(Criteria.where("abacus.factory_id").is(factoryId)),
@@ -129,7 +127,6 @@ public class DashboardService {
                 .build();
     }
 
-    // --------------------- FARM DASHBOARD ---------------------
     public FarmDashboard getFarm(int factoryId) {
         Aggregation agg = newAggregation(
                 match(Criteria.where("abacus.factory_id").is(factoryId)),
@@ -164,7 +161,6 @@ public class DashboardService {
                 .build();
     }
 
-    // --------------------- SHIFT DASHBOARD ---------------------
     public ShiftDashboard getShifts(int factoryId) {
         Aggregation agg = newAggregation(
                 match(Criteria.where("abacus.factory_id").is(factoryId)),
@@ -179,7 +175,6 @@ public class DashboardService {
         List<ShiftDashboard.QuantityPerShiftDTO> quantityPerShift =
                 mongoTemplate.aggregate(agg, COLLECTION, ShiftDashboard.QuantityPerShiftDTO.class).getMappedResults();
 
-        // Evolução mensal pode ser feita dinamicamente se necessário
         List<String> periods = Arrays.asList("Jan", "Feb", "Mar");
         List<Integer> morning = Arrays.asList(5, 6, 4);
         List<Integer> afternoon = Arrays.asList(7, 5, 8);
@@ -195,7 +190,6 @@ public class DashboardService {
                 .build();
     }
 
-    // --------------------- TOP SHIFTS ---------------------
     public ShiftDashboard getTopShifts(int factoryId) {
         Aggregation agg = newAggregation(
                 match(Criteria.where("abacus.factory_id").is(factoryId)),
@@ -217,7 +211,6 @@ public class DashboardService {
                 .build();
     }
 
-    // --------------------- MONTHLY CONDEMNATION BY FACTORY ---------------------
     public List<ComparativeDashboard.MonthlyRanking> getMonthlyCondemnationByFactory(int factoryId, int year) {
         Calendar start = Calendar.getInstance();
         start.set(year, Calendar.JANUARY, 1, 0, 0, 0);
@@ -240,7 +233,6 @@ public class DashboardService {
         return mongoTemplate.aggregate(agg, COLLECTION, ComparativeDashboard.MonthlyRanking.class).getMappedResults();
     }
 
-    // --------------------- TECHNICAL FAILURES BY LINE ---------------------
     public List<FailuresDashboard.ReasonRanking> getTechnicalFailuresByLine(int factoryId) {
         Aggregation agg = newAggregation(
                 match(Criteria.where("abacus.factory_id").is(factoryId)),
