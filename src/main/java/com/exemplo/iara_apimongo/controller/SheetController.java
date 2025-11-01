@@ -31,24 +31,24 @@ public class SheetController {
                 .body(ApiResponse.of("Sheet created successfully", HttpStatus.CREATED.value(), created));
     }
 
-    @Operation(summary = "Find a sheet by ID")
+    @Operation(summary = "Find a production sheet by its ID")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<SheetResponse>> findById(@PathVariable String id) {
         SheetResponse found = service.findById(id);
-        return ResponseEntity.ok(ApiResponse.of("Sheet found", HttpStatus.OK.value(), found));
+        return ResponseEntity.ok(ApiResponse.of("Sheet found successfully", HttpStatus.OK.value(), found));
     }
 
-    @Operation(summary = "List all sheets")
+    @Operation(summary = "List all production sheets")
     @GetMapping
     public ResponseEntity<ApiResponse<List<SheetResponse>>> findAll() {
         List<SheetResponse> all = service.findAll();
-        return ResponseEntity.ok(ApiResponse.of("All sheets retrieved", HttpStatus.OK.value(), all));
+        return ResponseEntity.ok(ApiResponse.of("Sheets retrieved successfully", HttpStatus.OK.value(), all));
     }
 
-    @Operation(summary = "Delete a sheet by ID")
+    @Operation(summary = "Delete a production sheet by its ID")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
         service.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ApiResponse.of("Sheet deleted successfully", HttpStatus.OK.value(), null));
     }
 }

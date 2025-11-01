@@ -13,16 +13,14 @@ public class SheetRequest {
     @Schema(description = "Factory ID", example = "1")
     private int factoryId;
 
-    @Schema(description = "Shift ID", example = "shift123")
-    @NotBlank(message = "Shift ID is mandatory.")
+    @Schema(description = "Shift ID related to this sheet", example = "shift123")
+    @NotBlank(message = "Shift ID is required.")
     private String shiftId;
 
     @Schema(description = "IDs of abacus photos in this sheet")
-    @NotEmpty(message = "Abacus photo IDs cannot be empty.")
+    @NotEmpty(message = "Abacus photo IDs can not be empty.")
     private List<String> abacusPhotoIds;
 
-    @Schema(description = "Sheet blob URL", example = "https://placekitten.com/196/314")
+    @Schema(description = "Sheet blob URL", example = "https://storage.example.com/sheet123.jpg")
     private String sheetUrlBlob;
 }
-
-

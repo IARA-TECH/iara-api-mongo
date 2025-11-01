@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalTime;
 
 @Slf4j
 @Service
@@ -19,32 +18,23 @@ public class ShiftService extends BaseService<Shift, String, ShiftRequest, Shift
     }
 
     @Override
-    protected Shift toEntity(ShiftRequest dto) {
+    protected Shift toEntity(ShiftRequest request) {
         return Shift.builder()
-                .name(dto.getName())
-                .startsAt(dto.getStartsAt().toString())
-                .endsAt(dto.getEndsAt().toString())
+                .name(request.getName())
+                .startsAt(request.getStartsAt())
+                .endsAt(request.getEndsAt())
+                .createdAt(Instant.now())
                 .build();
     }
 
     @Override
     protected ShiftResponse toResponse(Shift entity) {
-        Instant start = Instant.parse(entity.getStartsAt());
-        Instant end = Instant.parse(entity.getEndsAt());
-
         return ShiftResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())
-                .startsAt(start)
-                .endsAt(end)
+                .startsAt(entity.getStartsAt())
+                .endsAt(entity.getEndsAt())
                 .createdAt(entity.getCreatedAt())
                 .build();
-    }
-
-    @Override
-    protected void updateEntity(Shift entity, ShiftRequest dto) {
-        entity.setName(dto.getName());
-        entity.setStartsAt(dto.getStartsAt().toString());
-        entity.setEndsAt(dto.getEndsAt().toString());
     }
 }

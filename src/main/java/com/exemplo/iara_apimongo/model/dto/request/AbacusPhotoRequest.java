@@ -6,8 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -23,12 +21,9 @@ public class AbacusPhotoRequest {
     @Schema(description = "Abacus object reference")
     private Abacus abacus;
 
-    @Schema(description = "User who took the photo", example = "John Doe")
+    @Schema(description = "User who took the photo", example = "550e8400-e29b-41d4-a716-446655440000")
     @NotBlank(message = "Taken by is mandatory.")
     private String takenBy;
-
-    @Schema(description = "Date and time when the photo was taken", example = "2025-10-30T08:47:00")
-    private Instant takenAt;
 
     @Schema(description = "Photo blob URL", example = "https://picsum.photos/437/714")
     @NotBlank(message = "Photo URL blob is mandatory.")
@@ -36,9 +31,6 @@ public class AbacusPhotoRequest {
 
     @Schema(description = "Sheet blob URL", example = "https://picsum.photos/630/820")
     private String sheetUrlBlob;
-
-    @Schema(description = "Validator name", example = "Jane Doe")
-    private String validatedBy;
 
     @Schema(description = "Values in the abacus (rows and columns)")
     @NotEmpty(message = "Values cannot be empty.")

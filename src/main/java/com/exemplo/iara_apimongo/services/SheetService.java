@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,8 @@ import java.util.List;
 public class SheetService extends BaseService<Sheet, String, SheetRequest, SheetResponse> {
 
     private final ShiftRepository shiftRepository;
+
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
     public SheetService(SheetRepository repository, ShiftRepository shiftRepository) {
         super(repository, "Sheet");
@@ -49,16 +52,28 @@ public class SheetService extends BaseService<Sheet, String, SheetRequest, Sheet
 
     @Override
     protected SheetResponse toResponse(Sheet entity) {
+        String startsAt = null;
+        String endsAt = null;
+        Shift shift = entity.getShift();
+        if (shift != null) {
+            if (shift.getStartsAt() != null) {
+                startsAt = shift.getStartsAt();
+            }
+            if (shift.getEndsAt() != null) {
+                endsAt = shift.getEndsAt();
+            }
+        }
+
         return SheetResponse.builder()
                 .id(entity.getId())
                 .factoryId(entity.getFactoryId())
                 .abacusPhotoIds(entity.getAbacusPhotos() != null ? new ArrayList<>(entity.getAbacusPhotos()) : List.of())
                 .date(entity.getDate())
                 .sheetUrlBlob(entity.getSheetUrlBlob())
-                .shiftId(entity.getShift() != null ? entity.getShift().getId() : null)
-                .shiftName(entity.getShift() != null ? entity.getShift().getName() : null)
-                .shiftStartsAt(entity.getShift() != null ? entity.getShift().getStartsAt() : null)
-                .shiftEndsAt(entity.getShift() != null ? entity.getShift().getEndsAt() : null)
+                .shiftId(shift != null ? shift.getId() : null)
+                .shiftName(shift != null ? shift.getName() : null)
+                .shiftStartsAt(startsAt)
+                .shiftEndsAt(endsAt)
                 .build();
     }
 
@@ -66,18 +81,4 @@ public class SheetService extends BaseService<Sheet, String, SheetRequest, Sheet
         return shiftRepository.findById(shiftId)
                 .orElseThrow(() -> new ResourceNotFoundException("Shift not found with id: " + shiftId));
     }
-
-    @Override
-    protected void updateEntity(Sheet entity, SheetRequest request) {
-        entity.setFactoryId(request.getFactoryId());
-        entity.setAbacusPhotos(request.getAbacusPhotoIds() != null
-                ? new ArrayList<>(request.getAbacusPhotoIds())
-                : new ArrayList<>());
-        entity.setSheetUrlBlob(request.getSheetUrlBlob());
-
-        if (request.getShiftId() != null && !request.getShiftId().isBlank()) {
-            entity.setShift(getShift(request.getShiftId()));
-        }
-    }
-
 }

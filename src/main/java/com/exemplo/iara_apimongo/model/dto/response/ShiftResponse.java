@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.time.LocalTime;
 
 @Data
 @NoArgsConstructor
@@ -15,7 +14,8 @@ import java.time.LocalTime;
 public class ShiftResponse {
     private String id;
     private String name;
-    private Instant startsAt;
-    private Instant endsAt;
+    private String startsAt;
+    private String endsAt;
     private Instant createdAt;
 }
+

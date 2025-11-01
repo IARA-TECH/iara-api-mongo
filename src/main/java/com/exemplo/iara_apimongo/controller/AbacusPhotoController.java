@@ -48,10 +48,11 @@ public class AbacusPhotoController {
 
     @Operation(summary = "Delete an abacus photo by ID")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
         service.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ApiResponse.of("Resource deleted successfully.", 200, null));
     }
+
 
     @Operation(summary = "Validate sheet")
     @PutMapping("/validation/{id}")

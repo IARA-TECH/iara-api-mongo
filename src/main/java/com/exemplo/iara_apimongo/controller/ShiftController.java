@@ -46,8 +46,9 @@ public class ShiftController {
 
     @Operation(summary = "Delete a shift by ID")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
         service.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ApiResponse.of("Resource deleted successfully.", 200, null));
     }
+
 }
