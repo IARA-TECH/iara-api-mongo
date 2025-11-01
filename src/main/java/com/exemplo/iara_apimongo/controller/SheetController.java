@@ -64,7 +64,7 @@ public class SheetController {
     }
 
     @Operation(summary = "Get all sheets by factory ID", description = "Fetches all sheets associated with a specific factory ID.")
-    @GetMapping("/{factoryId}")
+    @GetMapping("/factory/{factoryId}")
     public ResponseEntity<ApiResponse<List<SheetResponse>>> findByFactoryId(@PathVariable int factoryId) {
         List<SheetResponse> sheets = service.findByFactoryId(factoryId);
         return ResponseEntity.ok(ApiResponse.of(
