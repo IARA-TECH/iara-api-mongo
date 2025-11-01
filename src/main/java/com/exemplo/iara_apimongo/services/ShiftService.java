@@ -1,5 +1,6 @@
 package com.exemplo.iara_apimongo.services;
 
+import com.exemplo.iara_apimongo.exception.ResourceNotFoundException;
 import com.exemplo.iara_apimongo.model.database.Shift;
 import com.exemplo.iara_apimongo.model.dto.request.ShiftRequest;
 import com.exemplo.iara_apimongo.model.dto.response.ShiftResponse;
@@ -13,8 +14,11 @@ import java.time.Instant;
 @Service
 public class ShiftService extends BaseService<Shift, String, ShiftRequest, ShiftResponse> {
 
+    private final ShiftRepository shiftRepository;
+
     public ShiftService(ShiftRepository repository) {
         super(repository, "Shift");
+        shiftRepository = repository;
     }
 
     @Override
@@ -36,5 +40,11 @@ public class ShiftService extends BaseService<Shift, String, ShiftRequest, Shift
                 .endsAt(entity.getEndsAt())
                 .createdAt(entity.getCreatedAt())
                 .build();
+    }
+
+    public ShiftResponse findByName(String name){
+        log.info("Finding shift by name {}", name);
+        return toResponse(shiftRepository.findByNameContainsIgnoreCase(name)
+                .orElseThrow(() -> new ResourceNotFoundException("Shift not found with name: "+ name)));
     }
 }
