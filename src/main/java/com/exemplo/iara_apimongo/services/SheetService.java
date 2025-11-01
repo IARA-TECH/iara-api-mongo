@@ -5,6 +5,7 @@ import com.exemplo.iara_apimongo.model.database.Sheet;
 import com.exemplo.iara_apimongo.model.database.Shift;
 import com.exemplo.iara_apimongo.model.dto.request.SheetRequest;
 import com.exemplo.iara_apimongo.model.dto.response.SheetResponse;
+import com.exemplo.iara_apimongo.repository.SheetRepository;
 import com.exemplo.iara_apimongo.repository.ShiftRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -94,4 +95,21 @@ public class SheetService extends BaseService<Sheet, String, SheetRequest, Sheet
         return shiftRepository.findById(shiftId)
                 .orElseThrow(() -> new ResourceNotFoundException("Shift not found with id: " + shiftId));
     }
+
+    public List<SheetResponse> findByFactoryId(int factoryId) {
+        log.info("Fetching sheets for factoryId {}", factoryId);
+
+        List<Sheet> sheets = ((SheetRepository) repository).findByFactoryId(factoryId);
+
+        if (sheets.isEmpty()) {
+            throw new ResourceNotFoundException("No sheets found for factoryId: " + factoryId);
+        }
+
+        List<SheetResponse> responses = new ArrayList<>();
+        for (Sheet sheet : sheets) {
+            responses.add(toResponse(sheet));
+        }
+        return responses;
+    }
+
 }
