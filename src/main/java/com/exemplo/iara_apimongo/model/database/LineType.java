@@ -1,13 +1,11 @@
 package com.exemplo.iara_apimongo.model.database;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -17,6 +15,9 @@ import java.time.Instant;
 public class LineType {
     @Id
     private String id;
+
     private String name;
-    private Instant createdDate;
+
+    @Field("created_at")
+    private LocalDateTime createdAt;
 }

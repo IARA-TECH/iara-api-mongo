@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -21,15 +21,10 @@ public class AbacusPhoto {
     private Integer factoryId;
 
     private Shift shift;
-
-    @Field("abacus_id")
     private Abacus abacus;
 
-    @Field("taken_by")
-    private String takenBy;
-
     @Field("taken_at")
-    private LocalDateTime takenAt;
+    private Instant takenAt;
 
     @Field("photo_url_blob")
     private String photoUrlBlob;

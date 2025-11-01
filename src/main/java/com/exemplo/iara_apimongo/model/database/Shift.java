@@ -1,6 +1,5 @@
 package com.exemplo.iara_apimongo.model.database;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,14 +16,11 @@ public class Shift {
     @Id
     private String id;
 
-    @NotBlank
     private String name;
 
-    @NotBlank
     @Field("starts_at")
     private String startsAt;
 
-    @NotBlank
     @Field("ends_at")
     private String endsAt;
 

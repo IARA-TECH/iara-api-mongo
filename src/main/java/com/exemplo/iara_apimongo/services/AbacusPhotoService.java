@@ -1,5 +1,6 @@
 package com.exemplo.iara_apimongo.services;
 
+import com.exemplo.iara_apimongo.exception.BadRequestException;
 import com.exemplo.iara_apimongo.exception.ResourceNotFoundException;
 import com.exemplo.iara_apimongo.model.database.Abacus;
 import com.exemplo.iara_apimongo.model.database.AbacusPhoto;
@@ -13,7 +14,7 @@ import com.exemplo.iara_apimongo.repository.ShiftRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Slf4j
 @Service
@@ -21,41 +22,63 @@ public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusP
 
     private final AbacusRepository abacusRepository;
     private final ShiftRepository shiftRepository;
+    private final AbacusPhotoRepository abacusPhotoRepository;
 
-    public AbacusPhotoService(AbacusPhotoRepository repository,
-                              AbacusRepository abacusRepository, ShiftRepository shiftRepository) {
-        super(repository, "AbacusPhoto");
+    public AbacusPhotoService(
+            AbacusPhotoRepository repository,
+            AbacusRepository abacusRepository,
+            ShiftRepository shiftRepository
+    ) {
+        super(repository, "Abacus photo");
         this.abacusRepository = abacusRepository;
         this.shiftRepository = shiftRepository;
+        this.abacusPhotoRepository = repository;
     }
 
     @Override
     protected AbacusPhoto toEntity(AbacusPhotoRequest request) {
+        if (request.getShiftId() == null || request.getShiftId().isBlank()) {
+            throw new BadRequestException("Shift ID is mandatory for abacus photo.");
+        }
+
+        Shift shift = shiftRepository.findById(request.getShiftId())
+                .orElseThrow(() -> new ResourceNotFoundException("Shift not found with ID: " + request.getShiftId()));
+
+        Abacus abacus = null;
+        if (request.getAbacus() != null && request.getAbacus().getId() != null) {
+            abacus = abacusRepository.findById(request.getAbacus().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Abacus not found with ID: " + request.getAbacus().getId()));
+        }
+
         return AbacusPhoto.builder()
                 .factoryId(request.getFactoryId())
-                .abacus(getAbacus(request.getAbacusId()))
-                .takenBy(request.getTakenBy())
-                .takenAt(LocalDateTime.now())
+                .shift(shift)
+                .abacus(abacus)
+                .takenAt(Instant.now())
                 .photoUrlBlob(request.getPhotoUrlBlob())
-                .shift(getShift(request.getShiftId()))
+                .sheetUrlBlob(request.getSheetUrlBlob())
+                .values(request.getValues())
+                .validatedBy(null)
                 .build();
     }
 
     @Override
     protected AbacusPhotoResponse toResponse(AbacusPhoto entity) {
+        Shift shift = entity.getShift();
 
         return AbacusPhotoResponse.builder()
                 .id(entity.getId())
                 .factoryId(entity.getFactoryId())
-                .shiftId(entity.getShift().getId())
-                .shiftName(entity.getShift().getName())
-                .shiftStartsAt(entity.getShift().getStartsAt())
-                .shiftEndsAt(entity.getShift().getEndsAt())
-                .abacusId(entity.getAbacus().getId())
-                .takenBy(entity.getTakenBy())
                 .takenAt(entity.getTakenAt())
                 .photoUrlBlob(entity.getPhotoUrlBlob())
                 .sheetUrlBlob(entity.getSheetUrlBlob())
+                .abacus(entity.getAbacus())
+                .values(entity.getValues())
+                .shiftId(shift != null ? shift.getId() : null)
+                .shiftName(shift != null ? shift.getName() : null)
+                .shiftStartsAt(shift != null ? shift.getStartsAt().toString() : null)
+                .shiftEndsAt(shift != null ? shift.getEndsAt().toString() : null)
+                .shiftCreatedAt(shift != null ? shift.getCreatedAt() : null)
                 .validatedBy(entity.getValidatedBy())
                 .build();
     }
@@ -72,9 +95,11 @@ public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusP
     }
 
     public AbacusPhotoResponse validate(String id, ValidationRequest request) {
-        AbacusPhoto photo = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Sheet not found with ID: " + id));
+        AbacusPhoto photo = abacusPhotoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Abacus photo not found with ID: " + id));
+
         photo.setValidatedBy(request.getValidatedBy());
-        return toResponse(repository.save(photo));
+        AbacusPhoto saved = abacusPhotoRepository.save(photo);
+        return toResponse(saved);
     }
 }

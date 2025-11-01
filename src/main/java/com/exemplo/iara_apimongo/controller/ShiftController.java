@@ -50,4 +50,5 @@ public class ShiftController {
         service.delete(id);
         return ResponseEntity.ok(ApiResponse.of("Shift deleted successfully", HttpStatus.OK.value(), null));
     }
+
 }

@@ -18,10 +18,10 @@ public class ShiftRequest {
     @Schema(description = "Start time (HH:mm)", example = "08:00")
     @NotNull(message = "Start time is required.")
     @JsonFormat(pattern = "HH:mm")
-    private LocalTime startsAt;
+    private String startsAt;
 
     @Schema(description = "End time (HH:mm)", example = "12:00")
     @NotNull(message = "End time is required.")
     @JsonFormat(pattern = "HH:mm")
-    private LocalTime endsAt;
+    private String endsAt;
 }
