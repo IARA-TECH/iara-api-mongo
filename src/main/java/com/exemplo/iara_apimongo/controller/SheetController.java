@@ -18,12 +18,12 @@ import java.util.List;
 @RequestMapping("/iara/api/sheets")
 @CrossOrigin("*")
 @RequiredArgsConstructor
-@Tag(name = "Sheets", description = "Operations related to production sheets")
+@Tag(name = "Sheets", description = "Operations related to sheets")
 public class SheetController {
 
     private final SheetService service;
 
-    @Operation(summary = "Create a new production sheet")
+    @Operation(summary = "Create a new sheet")
     @PostMapping
     public ResponseEntity<ApiResponse<SheetResponse>> create(@Valid @RequestBody SheetRequest dto) {
         SheetResponse created = service.create(dto);
@@ -31,21 +31,21 @@ public class SheetController {
                 .body(ApiResponse.of("Sheet created successfully", HttpStatus.CREATED.value(), created));
     }
 
-    @Operation(summary = "Find a production sheet by its ID")
+    @Operation(summary = "Find a sheet by ID")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<SheetResponse>> findById(@PathVariable String id) {
         SheetResponse found = service.findById(id);
         return ResponseEntity.ok(ApiResponse.of("Sheet found successfully", HttpStatus.OK.value(), found));
     }
 
-    @Operation(summary = "List all production sheets")
+    @Operation(summary = "List all sheets")
     @GetMapping
     public ResponseEntity<ApiResponse<List<SheetResponse>>> findAll() {
         List<SheetResponse> all = service.findAll();
         return ResponseEntity.ok(ApiResponse.of("Sheets retrieved successfully", HttpStatus.OK.value(), all));
     }
 
-    @Operation(summary = "Delete a production sheet by its ID")
+    @Operation(summary = "Delete a sheet by ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
         service.delete(id);

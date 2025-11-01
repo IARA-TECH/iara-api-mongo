@@ -50,7 +50,7 @@ public class AbacusPhotoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
         service.delete(id);
-        return ResponseEntity.ok(ApiResponse.of("Resource deleted successfully.", 200, null));
+        return ResponseEntity.ok(ApiResponse.of("Abacus photo deleted successfully", HttpStatus.OK.value(), null));
     }
 
 
