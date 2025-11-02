@@ -1,0 +1,29 @@
+[
+  {
+    "$match": {
+      "abacus.factory_id": 1,
+      "$expr": { "$eq": [ { "$year": "$taken_at" }, 2025 ] }
+    }
+  },
+  { "$unwind": "$values" },
+  {
+    "$project": {
+      "values": { "$sum": "$values" },
+      "month": { "$month": "$taken_at" }
+    }
+  },
+  {
+    "$group": {
+      "_id": "$month",
+      "totalCount": { "$sum": "$values" }
+    }
+  },
+  {
+    "$project": {
+      "month": "$_id",
+      "totalCount": true,
+      "_id": false
+    }
+  },
+  { "$sort": { "totalCount": -1 } }
+]

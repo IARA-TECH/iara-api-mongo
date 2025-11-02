@@ -35,14 +35,6 @@ public class AbacusPhotoController {
                 .body(ApiResponse.of("Abacus photo created successfully", HttpStatus.CREATED.value(), created));
     }
 
-    @Operation(summary = "Update an existing abacus photo")
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<AbacusPhotoResponse>> update(@PathVariable String id,
-                                                                   @Valid @RequestBody AbacusPhotoRequest dto) {
-        AbacusPhotoResponse updated = service.update(id, dto);
-        return ResponseEntity.ok(ApiResponse.of("Abacus photo updated successfully", HttpStatus.OK.value(), updated));
-    }
-
     @Operation(summary = "Find an abacus photo by ID")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<AbacusPhotoResponse>> findById(@PathVariable String id) {

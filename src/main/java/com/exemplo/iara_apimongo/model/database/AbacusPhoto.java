@@ -38,5 +38,5 @@ public class AbacusPhoto {
     @Field("validated_by")
     private String validatedBy;
 
-    private List<List<Integer>> values;
+    private List<List<String>> values;
 }
