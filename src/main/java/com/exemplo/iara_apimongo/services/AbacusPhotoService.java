@@ -65,9 +65,8 @@ public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusP
             MultipartFile csvFile
     ) {
         try {
-            log.info("Saving confirmed data for factory {}, shift {}, abacus {}", factoryId, shiftId, abacusId);
-            List<List<Integer>> values = CsvUtils.parseCsvToValues(csvFile);
-            ByteArrayInputStream xlsxStream = CsvUtils.convertToExcel(values);
+            List<List<String>> csvData = CsvUtils.parseCsvToValues(csvFile);
+            ByteArrayInputStream xlsxStream = CsvUtils.convertToExcel(csvData);
 
             MultipartFile excelFile = new MultipartFile() {
                 @Override public String getName() { return "sheet.xlsx"; }
@@ -103,18 +102,16 @@ public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusP
                     .takenAt(Instant.now())
                     .photoUrlBlob(imageUrl)
                     .sheetUrlBlob(sheetUrl)
-                    .values(values)
+                    .values(csvData)
                     .build();
             repository.save(photo);
 
             sheet.setAbacusPhotos(List.of(photo.getId()));
             sheetRepository.save(sheet);
 
-            log.info("AbacusPhoto and Sheet saved successfully: {}", photo.getId());
             return toResponse(photo);
 
         } catch (Exception e) {
-            log.error("Failed to save confirmed data: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to save confirmed data: " + e.getMessage(), e);
         }
     }
@@ -135,22 +132,14 @@ public class AbacusPhotoService extends BaseService<AbacusPhoto, String, AbacusP
 
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-            ResponseEntity<Map> response = restTemplate.exchange(
-                    modelUrl,
-                    HttpMethod.POST,
-                    requestEntity,
-                    Map.class
-            );
-
+            ResponseEntity<Map> response = restTemplate.exchange(modelUrl, HttpMethod.POST, requestEntity, Map.class);
             if (!response.getStatusCode().is2xxSuccessful()) {
                 throw new RuntimeException("Failed to send to model: " + response.getStatusCode());
             }
 
-            log.info("Model response received");
             return response.getBody();
 
         } catch (Exception e) {
-            log.error("Error sending to model: {}", e.getMessage(), e);
             throw new RuntimeException("Error sending to model: " + e.getMessage(), e);
         }
     }

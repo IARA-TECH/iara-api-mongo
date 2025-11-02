@@ -18,7 +18,7 @@ public class AbacusPhotoResponse {
     private String photoUrlBlob;
     private String sheetUrlBlob;
     private Abacus abacus;
-    private List<List<Integer>> values;
+    private List<List<String>> values;
 
     private String shiftId;
     private String shiftName;
