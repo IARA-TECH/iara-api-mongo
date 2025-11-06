@@ -1,7 +1,7 @@
 [
   {
     "$match": {
-      "abacus.factory_id": 1,
+      "abacus.factory_id": 8,
       "$expr": { "$eq": [ { "$year": "$taken_at" }, 2025 ] }
     }
   },
