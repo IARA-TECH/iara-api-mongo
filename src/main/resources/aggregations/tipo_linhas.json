@@ -1,6 +1,6 @@
 [
   {
-    "$match": { "abacus.factory_id": 1 }
+    "$match": { "abacus.factory_id": 8}
   },
   {
     "$project": {
